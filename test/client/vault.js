@@ -7,8 +7,24 @@ import { ZalgoPromise } from '@krakenjs/zalgo-promise/src';
 
 import {
     mockSetupButton, mockAsyncProp, createButtonHTML, getValidatePaymentMethodApiMock, getConfirmOrderApiMock,
-    clickButton, getGraphQLApiMock, generateOrderID, mockMenu, clickMenu, getMockWindowOpen, getCreateAccessTokenMock
+    clickButton, getGraphQLApiMock, generateOrderID, mockMenu, clickMenu, getMockWindowOpen, getCreateAccessTokenMock, DEFAULT_FUNDING_ELIGIBILITY
 } from './mocks';
+
+const fundingEligibilityPayPalVaulted = {
+    [FUNDING.PAYPAL]: {
+        eligible:  true,
+        branded: true,
+        vaultable: true
+    }
+};
+
+const fundingEligibilityPayPalNotVaulted = {
+    [FUNDING.PAYPAL]: {
+        eligible:  true,
+        branded: true,
+        vaultable: false
+    }
+};
 
 describe('vault cases', () => {
 
@@ -55,14 +71,7 @@ describe('vault cases', () => {
                 }
 
             }));
-
-            const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible:  true,
-                    vaultable: true
-                }
-            };
-
+            const fundingEligibility = fundingEligibilityPayPalVaulted 
             createButtonHTML({ fundingEligibility });
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
 
@@ -85,13 +94,7 @@ describe('vault cases', () => {
 
             window.xprops.onApprove = expect('onApprove');
 
-            const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible:  true,
-                    vaultable: false
-                }
-            };
-
+            const fundingEligibility = fundingEligibilityPayPalNotVaulted 
             createButtonHTML({ fundingEligibility });
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
 
@@ -141,12 +144,7 @@ describe('vault cases', () => {
                 }
             }));
 
-            const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible:  true,
-                    vaultable: false
-                }
-            };
+            const fundingEligibility = fundingEligibilityPayPalVaulted;
 
             createButtonHTML({ fundingEligibility });
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
@@ -197,13 +195,8 @@ describe('vault cases', () => {
                 }
             }));
 
-            const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible:  true,
-                    vaultable: false
-                }
-            };
-
+            
+            const fundingEligibility = fundingEligibilityPayPalNotVaulted
             createButtonHTML({ fundingEligibility });
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
 
@@ -259,12 +252,7 @@ describe('vault cases', () => {
                 }
             }));
 
-            const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible:  true,
-                    vaultable: true
-                }
-            };
+            const fundingEligibility = fundingEligibilityPayPalVaulted;
 
             createButtonHTML({ fundingEligibility });
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
@@ -337,6 +325,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -349,7 +338,7 @@ describe('vault cases', () => {
             };
 
             createButtonHTML({ fundingEligibility });
-            await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility, allowBillingPayments: true });
+            await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
 
             await clickButton(FUNDING.PAYPAL);
             gqlMock.done();
@@ -418,11 +407,10 @@ describe('vault cases', () => {
             }));
 
             const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible: true
-                },
+                ...DEFAULT_FUNDING_ELIGIBILITY,
                 [FUNDING.CARD]: {
                     eligible: true,
+                    branded: true,
                     vendors:  {
                         visa: {
                             eligible:           true,
@@ -512,11 +500,10 @@ describe('vault cases', () => {
             }));
 
             const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible: true
-                },
+                ...DEFAULT_FUNDING_ELIGIBILITY,
                 [FUNDING.CARD]: {
                     eligible:     true,
+                    branded: true,
                     installments: true,
                     vendors:      {
                         visa: {
@@ -537,7 +524,7 @@ describe('vault cases', () => {
             window.paypal.Checkout = avoid('Checkout', window.paypal.Checkout);
 
             createButtonHTML({ fundingEligibility });
-            await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility, enableVaultInstallments: true });
+            await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
 
             await clickButton(FUNDING.CARD);
             gqlMock.done();
@@ -610,6 +597,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -691,11 +679,10 @@ describe('vault cases', () => {
             }));
 
             const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible: true
-                },
+                ...DEFAULT_FUNDING_ELIGIBILITY,
                 [FUNDING.CARD]: {
                     eligible: true,
+                    branded: true,
                     vendors:  {
                         visa: {
                             eligible:           true,
@@ -784,6 +771,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -859,11 +847,10 @@ describe('vault cases', () => {
             window.xprops.onApprove = mockAsyncProp(avoid('onApprove'));
 
             const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible: true
-                },
+                ...DEFAULT_FUNDING_ELIGIBILITY,
                 [FUNDING.CARD]: {
                     eligible: true,
+                    branded: true,
                     vendors:  {
                         visa: {
                             eligible:           true,
@@ -917,6 +904,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -1013,6 +1001,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -1108,11 +1097,10 @@ describe('vault cases', () => {
             }).expectCalls();
 
             const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible: true
-                },
+                ...DEFAULT_FUNDING_ELIGIBILITY,
                 [FUNDING.CARD]: {
                     eligible: true,
+                    branded: true,
                     vendors:  {
                         visa: {
                             eligible:           true,
@@ -1276,6 +1264,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -1449,6 +1438,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.PAYPAL]: {
                     eligible:           true,
+                    branded: true,
                     vaultedInstruments: [
                         {
                             id:    paymentMethodID,
@@ -1491,12 +1481,7 @@ describe('vault cases', () => {
                 gqlMock.done();
             }));
 
-            const fundingEligibility = {
-                [FUNDING.PAYPAL]: {
-                    eligible:  true,
-                    vaultable: true
-                }
-            };
+            const fundingEligibility = fundingEligibilityPayPalVaulted;
 
             createButtonHTML({ fundingEligibility });
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility });
@@ -1607,6 +1592,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.CARD]: {
                     eligible: true,
+                    branded: true,
                     vendors: {
                         visa: {
                             eligible: true,
@@ -1718,6 +1704,7 @@ describe('vault cases', () => {
             const fundingEligibility = {
                 [FUNDING.CARD]: {
                     eligible: true,
+                    branded: true,
                     vendors: {
                         visa: {
                             eligible: true,

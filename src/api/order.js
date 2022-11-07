@@ -941,17 +941,18 @@ type UpdateButtonClientConfigOptions = {|
     fundingSource : $Values<typeof FUNDING>,
     inline : boolean | void,
     userExperienceFlow? : string,
-    buttonSessionID? : ?string
+    buttonSessionID? : ?string,
+    productFlow? : string
 |};
 
-export function updateButtonClientConfig({ orderID, fundingSource, inline = false, userExperienceFlow, buttonSessionID } : UpdateButtonClientConfigOptions) : ZalgoPromise<void> {
+export function updateButtonClientConfig({ orderID, productFlow, fundingSource, inline = false, userExperienceFlow, buttonSessionID } : UpdateButtonClientConfigOptions) : ZalgoPromise<void> {
     const experienceFlow = inline ? USER_EXPERIENCE_FLOW.INLINE : USER_EXPERIENCE_FLOW.INCONTEXT;
     return updateClientConfig({
         orderID,
         fundingSource,
         integrationArtifact: INTEGRATION_ARTIFACT.PAYPAL_JS_SDK,
         userExperienceFlow:  userExperienceFlow ? userExperienceFlow : experienceFlow,
-        productFlow:         PRODUCT_FLOW.SMART_PAYMENT_BUTTONS,
+        productFlow:         productFlow || PRODUCT_FLOW.SMART_PAYMENT_BUTTONS,
         buttonSessionID
     });
 }

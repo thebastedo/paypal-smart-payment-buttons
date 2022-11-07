@@ -8,7 +8,7 @@ import { getParent, getTop, type CrossDomainWindowType } from '@krakenjs/cross-d
 import type { ProxyWindow, ConnectOptions } from '../types';
 import { type CreateBillingAgreement, type CreateSubscription } from '../props';
 import { exchangeAccessTokenForAuthCode, getConnectURL, updateButtonClientConfig, getSmartWallet, loadFraudnet  } from '../api';
-import { CONTEXT, TARGET_ELEMENT, BUYER_INTENT, FPTI_TRANSITION, FPTI_CONTEXT_TYPE } from '../constants';
+import { CONTEXT, TARGET_ELEMENT, BUYER_INTENT, FPTI_TRANSITION, FPTI_CONTEXT_TYPE, PRODUCT_FLOW } from '../constants';
 import { unresolvedPromise, getLogger, setBuyerAccessToken } from '../lib';
 import { openPopup } from '../ui';
 import { FUNDING_SKIP_LOGIN } from '../config';
@@ -26,7 +26,7 @@ export const CHECKOUT_APM_POPUP_DIMENSIONS = {
 };
 
 let canRenderTop = false;
-let inline = false;
+let acceleratedXO = false;
 let smokeHash = '';
 
 function getSmokeHash() : ZalgoPromise<string> {
@@ -150,7 +150,7 @@ function initCheckout({ props, components, serviceData, payment, config, restart
     const { buyerCountry, sdkMeta, merchantID } = serviceData;
     const { cspNonce } = config;
 
-    inline = inlinexo && fundingSource === FUNDING.CARD;
+    acceleratedXO = inlinexo && fundingSource === FUNDING.CARD;
 
     let context = getContext({ win, isClick, merchantRequestedPopupsDisabled });
     const connectEligible = isConnectEligible({ connect, createBillingAgreement, createSubscription, vault, fundingSource });
@@ -167,7 +167,7 @@ function initCheckout({ props, components, serviceData, payment, config, restart
             stickinessID,
             clientAccessToken,
             venmoPayloadID,
-            inlinexo: inline,
+            inlinexo: acceleratedXO,
             smokeHash,
 
             createAuthCode: () => {
@@ -379,7 +379,7 @@ function initCheckout({ props, components, serviceData, payment, config, restart
 
     const click = () => {
         return ZalgoPromise.try(() => {
-            if (inline) {
+            if (acceleratedXO) {
                 context = CONTEXT.IFRAME;
             } else if (!merchantRequestedPopupsDisabled && !win && supportsPopups()) {
                 try {
@@ -414,10 +414,15 @@ function initCheckout({ props, components, serviceData, payment, config, restart
     return { click, start, close };
 }
 
-function updateCheckoutClientConfig({ orderID, payment, userExperienceFlow }) : ZalgoPromise<void> {
+function updateCheckoutClientConfig({ orderID, payment, userExperienceFlow, inlinexo }) : ZalgoPromise<void> {
     return ZalgoPromise.try(() => {
         const { buyerIntent, fundingSource } = payment;
-        const updateClientConfigPromise = updateButtonClientConfig({ fundingSource, orderID, inline, userExperienceFlow });
+        
+        let productFlow = PRODUCT_FLOW.SMART_PAYMENT_BUTTONS;
+        if (inlinexo) {
+            productFlow = PRODUCT_FLOW.ACCELERATED;
+        }
+        const updateClientConfigPromise = updateButtonClientConfig({ fundingSource, productFlow, orderID, inline: acceleratedXO, userExperienceFlow });
 
         // Block
         if (buyerIntent === BUYER_INTENT.PAY_WITH_DIFFERENT_FUNDING_SHIPPING) {

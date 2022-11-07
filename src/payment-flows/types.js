@@ -83,7 +83,8 @@ export type UpdateClientConfigOptions = {|
     orderID : string,
     payment : Payment,
     userExperienceFlow? : string,
-    buttonSessionID? : ?string
+    buttonSessionID? : ?string,
+    inlinexo? : boolean
 |};
 
 export type PaymentFlow = {|

@@ -11052,7 +11052,7 @@ window.spb = function(modules) {
                 fundingSource: _ref23.fundingSource,
                 integrationArtifact: constants.INTEGRATION_ARTIFACT.PAYPAL_JS_SDK,
                 userExperienceFlow: _ref23.userExperienceFlow || (void 0 !== _ref23$inline && _ref23$inline ? constants.USER_EXPERIENCE_FLOW.INLINE : constants.USER_EXPERIENCE_FLOW.INCONTEXT),
-                productFlow: constants.PRODUCT_FLOW.SMART_PAYMENT_BUTTONS,
+                productFlow: _ref23.productFlow || constants.PRODUCT_FLOW.SMART_PAYMENT_BUTTONS,
                 buttonSessionID: _ref23.buttonSessionID
             });
         }
@@ -12586,7 +12586,7 @@ window.spb = function(modules) {
         }
         var src_config = __webpack_require__("./src/config.js");
         var canRenderTop = !1;
-        var checkout_inline = !1;
+        var acceleratedXO = !1;
         var smokeHash = "";
         var checkout_getDimensions = function(fundingSource) {
             if (-1 !== sdk_constants_src.APM_LIST.indexOf(fundingSource)) {
@@ -12631,7 +12631,7 @@ window.spb = function(modules) {
                 var button = payment.button, win = payment.win, fundingSource = payment.fundingSource, card = payment.card, _payment$buyerAccessT = payment.buyerAccessToken, buyerAccessToken = void 0 === _payment$buyerAccessT ? serviceData.buyerAccessToken : _payment$buyerAccessT, venmoPayloadID = payment.venmoPayloadID, buyerIntent = payment.buyerIntent;
                 var buyerCountry = serviceData.buyerCountry, sdkMeta = serviceData.sdkMeta, merchantID = serviceData.merchantID;
                 var cspNonce = config.cspNonce;
-                checkout_inline = props.inlinexo && fundingSource === sdk_constants_src.FUNDING.CARD;
+                acceleratedXO = props.inlinexo && fundingSource === sdk_constants_src.FUNDING.CARD;
                 var context = function(_ref4) {
                     var win = _ref4.win, isClick = _ref4.isClick, merchantRequestedPopupsDisabled = _ref4.merchantRequestedPopupsDisabled;
                     var popupSupported = Object(src.supportsPopups)();
@@ -12676,7 +12676,7 @@ window.spb = function(modules) {
                         stickinessID: stickinessID,
                         clientAccessToken: clientAccessToken,
                         venmoPayloadID: venmoPayloadID,
-                        inlinexo: checkout_inline,
+                        inlinexo: acceleratedXO,
                         smokeHash: smokeHash,
                         createAuthCode: function() {
                             return zalgo_promise_src.ZalgoPromise.try((function() {
@@ -12873,7 +12873,7 @@ window.spb = function(modules) {
                 return {
                     click: function() {
                         return zalgo_promise_src.ZalgoPromise.try((function() {
-                            if (checkout_inline) context = constants.CONTEXT.IFRAME; else if (!merchantRequestedPopupsDisabled && !win && Object(src.supportsPopups)()) try {
+                            if (acceleratedXO) context = constants.CONTEXT.IFRAME; else if (!merchantRequestedPopupsDisabled && !win && Object(src.supportsPopups)()) try {
                                 var _getDimensions = checkout_getDimensions(fundingSource);
                                 win = function(_ref) {
                                     var width = _ref.width, height = _ref.height, _ref$closeOnUnload = _ref.closeOnUnload, closeOnUnload = void 0 === _ref$closeOnUnload ? 1 : _ref$closeOnUnload;
@@ -12916,13 +12916,16 @@ window.spb = function(modules) {
                 };
             },
             updateFlowClientConfig: function(_ref9) {
-                var orderID = _ref9.orderID, payment = _ref9.payment, userExperienceFlow = _ref9.userExperienceFlow;
+                var orderID = _ref9.orderID, payment = _ref9.payment, userExperienceFlow = _ref9.userExperienceFlow, inlinexo = _ref9.inlinexo;
                 return zalgo_promise_src.ZalgoPromise.try((function() {
                     var buyerIntent = payment.buyerIntent, fundingSource = payment.fundingSource;
+                    var productFlow = constants.PRODUCT_FLOW.SMART_PAYMENT_BUTTONS;
+                    inlinexo && (productFlow = constants.PRODUCT_FLOW.ACCELERATED);
                     var updateClientConfigPromise = Object(api.updateButtonClientConfig)({
                         fundingSource: fundingSource,
+                        productFlow: productFlow,
                         orderID: orderID,
-                        inline: checkout_inline,
+                        inline: acceleratedXO,
                         userExperienceFlow: userExperienceFlow
                     });
                     if (buyerIntent === constants.BUYER_INTENT.PAY_WITH_DIFFERENT_FUNDING_SHIPPING) return updateClientConfigPromise;
@@ -15687,7 +15690,7 @@ window.spb = function(modules) {
             return zalgo_promise_src.ZalgoPromise.try((function() {
                 var _getLogger$addPayload, _getLogger$info$track;
                 var merchantID = serviceData.merchantID, fundingEligibility = serviceData.fundingEligibility, buyerCountry = serviceData.buyerCountry;
-                var clientID = props.clientID, onClick = props.onClick, createOrder = props.createOrder, env = props.env, vault = props.vault, partnerAttributionID = props.partnerAttributionID, userExperienceFlow = props.userExperienceFlow, buttonSessionID = props.buttonSessionID, intent = props.intent, currency = props.currency, clientAccessToken = props.clientAccessToken, createBillingAgreement = props.createBillingAgreement, createSubscription = props.createSubscription, commit = props.commit, disableFunding = props.disableFunding, disableCard = props.disableCard, userIDToken = props.userIDToken, enableNativeCheckout = props.enableNativeCheckout;
+                var clientID = props.clientID, onClick = props.onClick, createOrder = props.createOrder, env = props.env, vault = props.vault, partnerAttributionID = props.partnerAttributionID, userExperienceFlow = props.userExperienceFlow, buttonSessionID = props.buttonSessionID, intent = props.intent, currency = props.currency, clientAccessToken = props.clientAccessToken, createBillingAgreement = props.createBillingAgreement, createSubscription = props.createSubscription, commit = props.commit, disableFunding = props.disableFunding, disableCard = props.disableCard, userIDToken = props.userIDToken, enableNativeCheckout = props.enableNativeCheckout, inlinexo = props.inlinexo;
                 !function(personalization) {
                     personalization && personalization.tagline && personalization.tagline.tracking && Object(lib.sendBeacon)(personalization.tagline.tracking.click);
                     personalization && personalization.buttonText && personalization.buttonText.tracking && Object(lib.sendBeacon)(personalization.buttonText.tracking.click);
@@ -15761,7 +15764,8 @@ window.spb = function(modules) {
                                 orderID: orderID,
                                 payment: payment,
                                 userExperienceFlow: userExperienceFlow,
-                                buttonSessionID: buttonSessionID
+                                buttonSessionID: buttonSessionID,
+                                inlinexo: inlinexo
                             });
                             Object(api.updateButtonClientConfig)({
                                 orderID: orderID,
@@ -16927,6 +16931,7 @@ window.spb = function(modules) {
             INLINE: "INLINE"
         };
         var PRODUCT_FLOW = {
+            ACCELERATED: "ACCELERATED_CHECKOUT",
             SMART_PAYMENT_BUTTONS: "SMART_PAYMENT_BUTTONS"
         };
         var FPTI_CONTEXT_TYPE = {

@@ -115,29 +115,29 @@ export function buildXOnShippingAddressChangeActions({ clientID, data, actions: 
         },
 
         updateShippingOptions: ({ options }) => {
-            if (options && options.length > 0) {
-                const selectedShippingOption = options.filter(option => option.selected === true);
-                const selectedShippingOptionAmount = selectedShippingOption && selectedShippingOption[0]?.amount?.value;
+            const selectedShippingOption = options.filter(option => option.selected === true);
+            const selectedShippingOptionAmount = selectedShippingOption && selectedShippingOption.length > 0
+                ? selectedShippingOption[0]?.amount?.value
+                : '0.00';
 
-                breakdown = buildBreakdown({ breakdown, updatedAmounts: { shipping: selectedShippingOptionAmount } });
-                newAmount = calculateTotalFromShippingBreakdownAmounts({ breakdown, updatedAmounts: { shipping: selectedShippingOptionAmount } });
-            
-                patchQueries[ON_SHIPPING_CHANGE_PATHS.AMOUNT] = {
-                    op:       'replace',
-                    path:     ON_SHIPPING_CHANGE_PATHS.AMOUNT,
-                    value: {
-                        value:         `${ newAmount }`,
-                        currency_code: data?.amount?.currency_code,
-                        breakdown
-                    }
-                };
+            breakdown = buildBreakdown({ breakdown, updatedAmounts: { shipping: selectedShippingOptionAmount } });
+            newAmount = calculateTotalFromShippingBreakdownAmounts({ breakdown, updatedAmounts: { shipping: selectedShippingOptionAmount } });
+        
+            patchQueries[ON_SHIPPING_CHANGE_PATHS.AMOUNT] = {
+                op:       'replace',
+                path:     ON_SHIPPING_CHANGE_PATHS.AMOUNT,
+                value: {
+                    value:         `${ newAmount }`,
+                    currency_code: data?.amount?.currency_code,
+                    breakdown
+                }
+            };
 
-                patchQueries[ON_SHIPPING_CHANGE_PATHS.OPTIONS] = {
-                    op:    data?.event || 'replace', // or 'add' if there are none.
-                    path:  ON_SHIPPING_CHANGE_PATHS.OPTIONS,
-                    value: options
-                };
-            }
+            patchQueries[ON_SHIPPING_CHANGE_PATHS.OPTIONS] = {
+                op:    data?.event || 'replace', // or 'add' if there are none.
+                path:  ON_SHIPPING_CHANGE_PATHS.OPTIONS,
+                value: options
+            };
 
             return actions;
         },

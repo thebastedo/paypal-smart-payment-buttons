@@ -4,7 +4,7 @@ import { onClick as onElementClick, querySelectorAll, noop, stringifyErrorMessag
 import { COUNTRY, FPTI_KEY, type FundingEligibilityType } from '@paypal/sdk-constants/src';
 import { ZalgoPromise } from '@krakenjs/zalgo-promise/src';
 
-import type { ContentType, Wallet, PersonalizationType, InlinePaymentFieldsEligibility } from '../types';
+import type { ContentType, Wallet, PersonalizationType, FeatureFlags, InlinePaymentFieldsEligibility } from '../types';
 import { getLogger, getSmartFieldsByFundingSource } from '../lib';
 import { type FirebaseConfig } from '../api';
 import { DATA_ATTRIBUTES, BUYER_INTENT } from '../constants';
@@ -37,7 +37,8 @@ export type SetupButtonOptions = {|
     correlationID? : string,
     cookies : string,
     personalization : PersonalizationType,
-    brandedDefault? : boolean | null
+    brandedDefault? : boolean | null,
+    featureFlags: FeatureFlags
 |};
 
 try {
@@ -52,23 +53,48 @@ try {
     // pass
 }
 
-export function setupButton(opts : SetupButtonOptions) : ZalgoPromise<void> {
+export function setupButton({
+    facilitatorAccessToken,
+    eligibility,
+    fundingEligibility,
+    buyerCountry: buyerGeoCountry,
+    sdkMeta,
+    buyerAccessToken,
+    wallet,
+    cookies,
+    cspNonce: serverCSPNonce,
+    merchantID: serverMerchantID,
+    firebaseConfig,
+    content,
+    personalization,
+    correlationID: buttonCorrelationID = '',
+    brandedDefault = null,
+    featureFlags
+}: SetupButtonOptions) : ZalgoPromise<void> {
     if (!window.paypal) {
         throw new Error(`PayPal SDK not loaded`);
     }
 
-    const { facilitatorAccessToken, eligibility, fundingEligibility, buyerCountry: buyerGeoCountry, sdkMeta, buyerAccessToken, wallet, cookies,
-        cspNonce: serverCSPNonce, merchantID: serverMerchantID, firebaseConfig, content, personalization, correlationID: buttonCorrelationID = '',
-        brandedDefault = null } = opts;
-
     const clientID = window.xprops.clientID;
 
     const serviceData = getServiceData({
-        eligibility, facilitatorAccessToken, buyerGeoCountry, serverMerchantID, fundingEligibility, cookies,
-        sdkMeta, buyerAccessToken, wallet, content, personalization });
+        eligibility,
+        facilitatorAccessToken,
+        buyerGeoCountry,
+        serverMerchantID,
+        fundingEligibility,
+        cookies,
+        sdkMeta,
+        buyerAccessToken,
+        wallet,
+        content,
+        personalization,
+        featureFlags
+    });
+
     const { merchantID, buyerCountry } = serviceData;
 
-    const props = getButtonProps({ facilitatorAccessToken, brandedDefault, paymentSource: null });
+    const props = getButtonProps({ facilitatorAccessToken, brandedDefault, paymentSource: null, featureFlags });
     const { env, sessionID, partnerAttributionID, commit, sdkCorrelationID, locale, onShippingChange,
         buttonSessionID, merchantDomain, onInit,
         getPrerenderDetails, rememberFunding, getQueriedEligibleFunding, experience,
@@ -165,7 +191,7 @@ export function setupButton(opts : SetupButtonOptions) : ZalgoPromise<void> {
             event.preventDefault();
             event.stopPropagation();
 
-            const paymentProps = getButtonProps({ facilitatorAccessToken, brandedDefault, paymentSource: paymentFundingSource });
+            const paymentProps = getButtonProps({ facilitatorAccessToken, brandedDefault, paymentSource: paymentFundingSource, featureFlags });
 
             const payPromise = initiatePayment({ payment, props: paymentProps });
             const { onError } = paymentProps;
@@ -207,7 +233,7 @@ export function setupButton(opts : SetupButtonOptions) : ZalgoPromise<void> {
                 throw new Error(`Can not find button element`);
             }
 
-            const paymentProps = getButtonProps({ facilitatorAccessToken, brandedDefault, paymentSource: paymentFundingSource });
+            const paymentProps = getButtonProps({ facilitatorAccessToken, brandedDefault, paymentSource: paymentFundingSource, featureFlags });
             const payment = { win, button, fundingSource: paymentFundingSource, card, buyerIntent: BUYER_INTENT.PAY };
             const payPromise = initiatePayment({ payment, props: paymentProps });
             const { onError } = paymentProps;
@@ -231,7 +257,7 @@ export function setupButton(opts : SetupButtonOptions) : ZalgoPromise<void> {
     const setupPaymentFlowsTask = setupPaymentFlows({ props, config, serviceData, components });
     const setupExportsTask = setupExports({ props, isEnabled, facilitatorAccessToken, fundingEligibility, merchantID });
 
-    const validatePropsTask = setupButtonLogsTask.then(() => validateProps({ env, clientID, intent, createBillingAgreement, createSubscription }));
+    const validatePropsTask = setupButtonLogsTask.then(() => validateProps({ intent, createBillingAgreement, createSubscription, featureFlags }));
 
     return ZalgoPromise.hash({
         initPromise, facilitatorAccessToken,

@@ -5,8 +5,9 @@ import { memoize, redirect as redir } from '@krakenjs/belter/src';
 import { INTENT, FPTI_KEY } from '@paypal/sdk-constants/src';
 
 import { getLogger, promiseNoop } from '../lib';
-import { FPTI_TRANSITION, FPTI_CONTEXT_TYPE, LSAT_UPGRADE_EXCLUDED_MERCHANTS } from '../constants';
+import { FPTI_TRANSITION, FPTI_CONTEXT_TYPE } from '../constants';
 import { getOrder, type OrderResponse } from '../api';
+import type { FeatureFlags } from '../types';
 
 import type { CreateOrder } from './createOrder';
 import type { OnError } from './onError';
@@ -57,6 +58,7 @@ type GetOnCompleteOptions = {|
     clientID : string,
     facilitatorAccessToken : string,
     createOrder : CreateOrder,
+    featureFlags: FeatureFlags
 |};
 
 const redirect = (url) => {
@@ -88,14 +90,15 @@ const buildOnCompleteActions = ({ orderID, facilitatorAccessToken, buyerAccessTo
     };
 };
 
-export function getOnComplete({ intent, onComplete, partnerAttributionID, onError, clientID, facilitatorAccessToken, createOrder } : GetOnCompleteOptions) : OnComplete {
+export function getOnComplete({ intent, onComplete, partnerAttributionID, onError, facilitatorAccessToken, createOrder, featureFlags } : GetOnCompleteOptions) : OnComplete {
     if (!onComplete) {
         return promiseNoop;
     }
 
-    const upgradeLSAT = LSAT_UPGRADE_EXCLUDED_MERCHANTS.indexOf(clientID) === -1;
-
-    return memoize(({ buyerAccessToken, forceRestAPI = upgradeLSAT } : OnCompleteData) => {
+    return memoize(({ 
+        buyerAccessToken,
+        forceRestAPI = featureFlags.isLsatUpgradable
+    } : OnCompleteData) => {
         return createOrder().then(orderID => {
             getLogger()
                 .info('button_complete')

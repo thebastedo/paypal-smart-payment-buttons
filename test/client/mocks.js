@@ -273,7 +273,7 @@ export function setupMocks() {
                     };
                 },
                 submit: () => {
-                    return submitCardFields({ facilitatorAccessToken: 'ABCDEF12345' });
+                    return submitCardFields({ facilitatorAccessToken: 'ABCDEF12345', featureFlags: {} });
                 }
             };
         },
@@ -1631,6 +1631,9 @@ export async function mockSetupButton(options : $Shape<SetupButtonOptions> = {})
             }
         },
         sdkMeta: MOCK_SDK_META,
+        featureFlags: {
+            isLsatUpgradable: true
+        },
         ...options
     });
 }
@@ -1638,7 +1641,8 @@ export async function mockSetupButton(options : $Shape<SetupButtonOptions> = {})
 export async function mockSetupCardFields() : Promise<void> {
     await setupCard({
         cspNonce:               '111222333',
-        facilitatorAccessToken: 'ABCDEF12345'
+        facilitatorAccessToken: 'ABCDEF12345',
+        featureFlags: {}
     });
 }
 

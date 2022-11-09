@@ -171,7 +171,15 @@ export function initiatePaymentFlow({ payment, serviceData, config, components, 
             });
 
             const validateOrderPromise = createOrder().then(orderID => {
-                return validateOrder(orderID, { env, clientID, merchantID, intent, currency, vault, buttonLabel });
+                return validateOrder(orderID, {
+                    env,
+                    merchantID,
+                    intent,
+                    currency,
+                    vault,
+                    buttonLabel,
+                    featureFlags: serviceData.featureFlags
+                });
             });
              
             const confirmOrderPromise = createOrder().then((orderID) => {

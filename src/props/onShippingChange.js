@@ -4,9 +4,9 @@ import { ZalgoPromise } from '@krakenjs/zalgo-promise/src';
 import { COUNTRY, FPTI_KEY } from '@paypal/sdk-constants/src';
 
 import { patchOrder, type OrderResponse } from '../api';
-import { FPTI_TRANSITION, FPTI_CONTEXT_TYPE, LSAT_UPGRADE_EXCLUDED_MERCHANTS, FPTI_CUSTOM_KEY } from '../constants';
+import { FPTI_TRANSITION, FPTI_CONTEXT_TYPE, FPTI_CUSTOM_KEY } from '../constants';
 import { getLogger } from '../lib';
-import type { OrderAmount } from '../types';
+import type { OrderAmount, FeatureFlags } from '../types';
 
 import type { CreateOrder } from './createOrder';
 
@@ -125,14 +125,16 @@ export type OnShippingChange = (OnShippingChangeData, OnShippingChangeActionsTyp
 type OnShippingChangeXProps = {|
     onShippingChange : ?XOnShippingChange,
     partnerAttributionID : ?string,
-    clientID : string
+    featureFlags : FeatureFlags
 |};
 
-export function getOnShippingChange({ onShippingChange, partnerAttributionID, clientID } : OnShippingChangeXProps, { facilitatorAccessToken, createOrder } : {| facilitatorAccessToken : string, createOrder : CreateOrder |}) : ?OnShippingChange {
-    const upgradeLSAT = LSAT_UPGRADE_EXCLUDED_MERCHANTS.indexOf(clientID) === -1;
-
+export function getOnShippingChange({ onShippingChange, partnerAttributionID, featureFlags } : OnShippingChangeXProps, { facilitatorAccessToken, createOrder } : {| facilitatorAccessToken : string, createOrder : CreateOrder |}) : ?OnShippingChange {
     if (onShippingChange) {
-        return ({ buyerAccessToken, forceRestAPI = upgradeLSAT, ...data }, actions) => {
+        return ({
+            buyerAccessToken,
+            forceRestAPI = featureFlags.isLsatUpgradable,
+            ...data
+        }, actions) => {
             return createOrder().then(orderID => {
                 getLogger()
                     .info('button_shipping_change')

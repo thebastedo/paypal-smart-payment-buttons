@@ -14,6 +14,14 @@ import type { ConfirmData } from './api/order';
 // export something to force webpack to see this as an ES module
 export const TYPES = true;
 
+// This type is shared with smartcomponentnodeweb
+// When we move to typescript we should figure out
+// how to share this type between the two code bases
+export type FeatureFlags = $Shape<{|
+    isLsatUpgradable: boolean;
+    shouldThrowIntegrationError: boolean
+|}>
+
 export type ProxyWindow = _ProxyWindow;
 
 export type LocaleType = {|

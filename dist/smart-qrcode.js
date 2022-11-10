@@ -2811,20 +2811,11 @@
         };
         var payu_logo_LOGO_COLORS;
         (payu_logo_LOGO_COLORS = {}).default = {
-            primary: "#A6d71c",
-            secondary: "#3C932A",
-            tertiary: "#6CC62E",
-            quaternary: "#278D30"
+            primary: "#A6C307"
         }, payu_logo_LOGO_COLORS.white = {
-            primary: "#FFFFFF",
-            secondary: "#FFFFFF",
-            tertiary: "#000000",
-            quaternary: "#FFFFFF"
+            primary: "#FFFFFF"
         }, payu_logo_LOGO_COLORS.black = {
-            primary: "#333030",
-            secondary: "#333030",
-            tertiary: "#ffffff",
-            quaternary: "#333030"
+            primary: "#2C2E2F"
         };
         var verkkopankki_logo_LOGO_COLORS;
         (verkkopankki_logo_LOGO_COLORS = {}).default = {
@@ -2934,6 +2925,14 @@
         }, multibanco_logo_LOGO_COLORS.black = {
             primary: "#1866AB",
             secondary: "#373535"
+        };
+        var satispay_logo_LOGO_COLORS;
+        (satispay_logo_LOGO_COLORS = {}).default = {
+            primary: "#FFFFFF"
+        }, satispay_logo_LOGO_COLORS.white = {
+            primary: "#FFFFFF"
+        }, satispay_logo_LOGO_COLORS.black = {
+            primary: "#2C2E2F"
         };
         function ErrorMessage(_ref) {
             var resetFunc = _ref.resetFunc;
@@ -3184,7 +3183,7 @@
             logger.addTrackingBuilder((function() {
                 var _ref2;
                 return (_ref2 = {}).state_name = "smart_button", _ref2.context_type = "EC-Token", 
-                _ref2.context_id = orderID, _ref2.button_session_id = buttonSessionID, _ref2.button_version = "5.0.117", 
+                _ref2.context_id = orderID, _ref2.button_session_id = buttonSessionID, _ref2.button_version = "5.0.118", 
                 _ref2.user_id = buttonSessionID, _ref2;
             }));
             (function() {

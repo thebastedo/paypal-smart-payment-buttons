@@ -911,7 +911,6 @@ window.smartCard = function(modules) {
         }));
         var sfvcScreens = {
             932: {
-                device: "iPhone 14 Pro Max",
                 textSizeHeights: [ 746, 742, 738 ],
                 textSizeHeightsNoTabs: [ 854, 852, 850, 848 ],
                 zoomHeight: {
@@ -937,7 +936,6 @@ window.smartCard = function(modules) {
                 }
             },
             926: {
-                device: "iPhone 12/13 Pro Max, iPhone 14 Plus",
                 textSizeHeights: [ 752, 748, 744, 738 ],
                 textSizeHeightsNoTabs: [ 860, 858, 856, 854 ],
                 zoomHeight: {
@@ -956,7 +954,6 @@ window.smartCard = function(modules) {
                 }
             },
             896: {
-                device: "iPhone XS Max, iPhone 11 Pro Max, iPhone XR, iPhone 11",
                 textSizeHeights: [ 721, 717, 713, 707 ],
                 textSizeHeightsNoTabs: [ 829, 827, 825, 823 ],
                 zoomHeight: {
@@ -974,7 +971,6 @@ window.smartCard = function(modules) {
                 }
             },
             852: {
-                device: "iPhone 14 Pro",
                 textSizeHeights: [ 666, 662, 658 ],
                 textSizeHeightsNoTabs: [ 774, 772, 770, 768 ],
                 zoomHeight: {
@@ -1000,7 +996,6 @@ window.smartCard = function(modules) {
                 }
             },
             844: {
-                device: "iPhone 12, iPhone 12 Pro, iPhone 13, iPhone 14",
                 textSizeHeights: [ 670, 666, 662, 656 ],
                 textSizeHeightsNoTabs: [ 778, 776, 774, 772 ],
                 zoomHeight: {
@@ -1021,7 +1016,6 @@ window.smartCard = function(modules) {
                 }
             },
             812: {
-                device: "iPhone X, iPhone XS, iPhone 11 Pro, iPhone 12 Mini",
                 textSizeHeights: [ 641, 637, 633, 627 ],
                 textSizeHeightsNoTabs: [ 749, 747, 745, 743 ],
                 zoomHeight: {
@@ -1039,7 +1033,6 @@ window.smartCard = function(modules) {
                 }
             },
             736: {
-                device: "iPhone 6 Plus, iPhone 6S Plus, iPhone 7 Plus, iPhone 8 Plus",
                 textSizeHeights: [ 628, 624, 620, 614 ],
                 textSizeHeightsNoTabs: [ 736, 734, 732, 730 ],
                 zoomHeight: {
@@ -1058,7 +1051,6 @@ window.smartCard = function(modules) {
                 }
             },
             667: {
-                device: "iPhone 6, iPhone 6S, iPhone 7, iPhone 8,  iPhone SE2",
                 textSizeHeights: [ 559, 555, 551, 545 ],
                 textSizeHeightsNoTabs: [ 667, 665, 663, 661 ],
                 zoomHeight: {
@@ -4106,9 +4098,9 @@ window.smartCard = function(modules) {
     }([ function(E, N, S) {
         "use strict";
         S.r(N), S.d(N, "DEFAULT_COUNTRY", (function() {
-            return Z;
-        })), S.d(N, "DEFAULT_CURRENCY", (function() {
             return a;
+        })), S.d(N, "DEFAULT_CURRENCY", (function() {
+            return Z;
         })), S.d(N, "DEFAULT_INTENT", (function() {
             return u;
         })), S.d(N, "DEFAULT_COMMIT", (function() {
@@ -4124,9 +4116,9 @@ window.smartCard = function(modules) {
         })), S.d(N, "DEFAULT_DEBUG", (function() {
             return B;
         })), S.d(N, "ENV", (function() {
-            return G;
-        })), S.d(N, "MOBILE_ENV", (function() {
             return s;
+        })), S.d(N, "MOBILE_ENV", (function() {
+            return G;
         })), S.d(N, "ERROR_CODE", (function() {
             return K;
         })), S.d(N, "FPTI_KEY", (function() {
@@ -4142,9 +4134,9 @@ window.smartCard = function(modules) {
         })), S.d(N, "FUNDING", (function() {
             return m;
         })), S.d(N, "FUNDING_BRAND_LABEL", (function() {
-            return b;
-        })), S.d(N, "CARD", (function() {
             return y;
+        })), S.d(N, "CARD", (function() {
+            return b;
         })), S.d(N, "WALLET_INSTRUMENT", (function() {
             return W;
         })), S.d(N, "FUNDING_PRODUCTS", (function() {
@@ -4809,13 +4801,13 @@ window.smartCard = function(modules) {
             SEARCH_RESULTS: "search-results",
             PRODUCT_DETAILS: "product-details",
             MINI_CART: "mini-cart"
-        }, C = 10, Z = R.US, a = r.USD, u = e.CAPTURE, L = n.TRUE, P = n.TRUE, d = n.TRUE, c = A.FALSE, U = D.BUTTONS, B = H.FALSE, G = {
+        }, C = 10, a = R.US, Z = r.USD, u = e.CAPTURE, L = n.TRUE, P = n.TRUE, d = n.TRUE, c = A.FALSE, U = D.BUTTONS, B = H.FALSE, s = {
             LOCAL: "local",
             STAGE: "stage",
             SANDBOX: "sandbox",
             PRODUCTION: "production",
             TEST: "test"
-        }, s = {
+        }, G = {
             ANDROID: "android",
             IOS: "iOS"
         }, K = {
@@ -4921,11 +4913,12 @@ window.smartCard = function(modules) {
             BOLETOBANCARIO: "boletobancario",
             WECHATPAY: "wechatpay",
             MERCADOPAGO: "mercadopago",
-            MULTIBANCO: "multibanco"
-        }, b = {
+            MULTIBANCO: "multibanco",
+            SATISPAY: "satispay"
+        }, y = {
             PAYPAL: "PayPal",
             CREDIT: "PayPal Credit"
-        }, y = {
+        }, b = {
             VISA: "visa",
             MASTERCARD: "mastercard",
             AMEX: "amex",
@@ -4947,7 +4940,7 @@ window.smartCard = function(modules) {
         }, h = {
             DESKTOP: "desktop",
             MOBILE: "mobile"
-        }, k = !0, g = [ m.IDEAL, m.BANCONTACT, m.GIROPAY, m.SOFORT, m.EPS, m.MYBANK, m.P24, m.PAYU, m.BLIK, m.TRUSTLY, m.ZIMPLER, m.MAXIMA, m.OXXO, m.BOLETO, m.BOLETOBANCARIO, m.WECHATPAY, m.MERCADOPAGO, m.MULTIBANCO ];
+        }, k = !0, g = [ m.IDEAL, m.BANCONTACT, m.GIROPAY, m.SOFORT, m.EPS, m.MYBANK, m.P24, m.PAYU, m.BLIK, m.TRUSTLY, m.ZIMPLER, m.MAXIMA, m.OXXO, m.BOLETO, m.BOLETOBANCARIO, m.WECHATPAY, m.MERCADOPAGO, m.MULTIBANCO, m.SATISPAY ];
     } ]);
 }, function(module, __webpack_exports__, __webpack_require__) {
     "use strict";
@@ -6422,7 +6415,6 @@ window.smartCard = function(modules) {
             xhr.send(body);
         }));
     }
-    var LSAT_UPGRADE_EXCLUDED_MERCHANTS = [ "AQipcJ1uXz50maKgYx49lKUB8MlSOXP573M6cpsFpHqDZOqnopsJpfYY7bQC_9CtQJsEhGlk8HLs2oZz", "Aco-yrRKihknb5vDBbDOdtYywjYMEPaM7mQg6kev8VDAz01lLA88J4oAUnF4UV9F_InqkqX7K62_jOjx", "AeAiB9K2rRsTXsFKZt4FMAQ8a6VEu4hijducis3a8NcIjV2J_c5I2H2PYhT3qCOwxT8P4l17skqgBlmg", "AXKrWRqEvxiDoUIZQaD1tFi2QhtmhWve3yTDBi58bxWjieYJ9j73My-yJmM7hP00JvOXu4YD6L2eaI5O", "AfRTnXv_QcuVyalbUxThtgk1xTygygsdevlBUTz36dDgD6XZNHp3Ym99a-mjMaokXyTTiI8VJ9mRgaFB", "AejlsIlg_KjKjmLKqxJqFIAwn3ZP02emx41Z2It4IfirQ-nNgZgzWk1CU-Q1QDbYUXjWoYJZ4dq1S2pK", "AQXD7-m_2yMo-5AxJ1fQaPeEWYDE7NZ9XrLzEXeiPLTHDu9vfe_T0foF8BoX8K5cMfXuRDysUEmhw-8Z" ];
     var AUTO_FLUSH_LEVEL = [ "warn", "error" ];
     var LOG_LEVEL_PRIORITY = [ "error", "warn", "info", "debug" ];
     var sendBeacon = function(_ref2) {
@@ -7692,7 +7684,7 @@ window.smartCard = function(modules) {
     var onShippingAddressChange_excluded = [ "amount", "buyerAccessToken", "event", "forceRestAPI", "shipping_address" ];
     var onShippingOptionsChange_excluded = [ "amount", "buyerAccessToken", "event", "forceRestAPI", "options", "selected_shipping_option" ];
     function getProps(_ref) {
-        var facilitatorAccessToken = _ref.facilitatorAccessToken, branded = _ref.branded, paymentSource = _ref.paymentSource;
+        var facilitatorAccessToken = _ref.facilitatorAccessToken, branded = _ref.branded, paymentSource = _ref.paymentSource, featureFlags = _ref.featureFlags;
         var xprops = window.xprops;
         var uid = xprops.uid, env = xprops.env, _xprops$vault = xprops.vault, vault = void 0 !== _xprops$vault && _xprops$vault, commit = xprops.commit, locale = xprops.locale, platform = xprops.platform, sessionID = xprops.sessionID, clientID = xprops.clientID, partnerAttributionID = xprops.partnerAttributionID, merchantRequestedPopupsDisabled = xprops.merchantRequestedPopupsDisabled, clientMetadataID = xprops.clientMetadataID, sdkCorrelationID = xprops.sdkCorrelationID, getParentDomain = xprops.getParentDomain, clientAccessToken = xprops.clientAccessToken, getPopupBridge = xprops.getPopupBridge, getPrerenderDetails = xprops.getPrerenderDetails, getPageUrl = xprops.getPageUrl, enableThreeDomainSecure = xprops.enableThreeDomainSecure, enableVaultInstallments = xprops.enableVaultInstallments, _xprops$enableNativeC = xprops.enableNativeCheckout, enableNativeCheckout = void 0 !== _xprops$enableNativeC && _xprops$enableNativeC, _xprops$experience = xprops.experience, experience = void 0 === _xprops$experience ? "" : _xprops$experience, rememberFunding = xprops.remember, stageHost = xprops.stageHost, apiStageHost = xprops.apiStageHost, getParent = xprops.getParent, fundingSource = xprops.fundingSource, currency = xprops.currency, connect = xprops.connect, intent = xprops.intent, merchantID = xprops.merchantID, amount = xprops.amount, userIDToken = xprops.userIDToken, enableFunding = xprops.enableFunding, disableFunding = xprops.disableFunding, disableCard = xprops.disableCard, disableAutocomplete = xprops.disableAutocomplete, wallet = xprops.wallet, _xprops$paymentMethod = xprops.paymentMethodToken, paymentMethodToken = void 0 === _xprops$paymentMethod ? xprops.paymentMethodNonce : _xprops$paymentMethod, _xprops$getQueriedEli = xprops.getQueriedEligibleFunding, getQueriedEligibleFunding = void 0 === _xprops$getQueriedEli ? function() {
             return promise_ZalgoPromise.resolve([]);
@@ -7894,7 +7886,7 @@ window.smartCard = function(modules) {
             onError: xprops.onError
         });
         var onApprove = function(_ref19) {
-            var intent = _ref19.intent, createSubscription = _ref19.createSubscription, onApprove = _ref19.onApprove, partnerAttributionID = _ref19.partnerAttributionID, onError = _ref19.onError, clientAccessToken = _ref19.clientAccessToken, vault = _ref19.vault, clientID = _ref19.clientID, facilitatorAccessToken = _ref19.facilitatorAccessToken, branded = _ref19.branded, createOrder = _ref19.createOrder, paymentSource = _ref19.paymentSource;
+            var intent = _ref19.intent, createSubscription = _ref19.createSubscription, onApprove = _ref19.onApprove, partnerAttributionID = _ref19.partnerAttributionID, onError = _ref19.onError, clientAccessToken = _ref19.clientAccessToken, vault = _ref19.vault, clientID = _ref19.clientID, facilitatorAccessToken = _ref19.facilitatorAccessToken, branded = _ref19.branded, createOrder = _ref19.createOrder, paymentSource = _ref19.paymentSource, featureFlags = _ref19.featureFlags;
             if (_ref19.createBillingAgreement) return function(_ref10) {
                 var _ref10$onApprove = _ref10.onApprove, onApprove = void 0 === _ref10$onApprove ? function() {
                     throw new Error("Expected onApprove");
@@ -8024,11 +8016,10 @@ window.smartCard = function(modules) {
                         if ("authorize" === intent) return actions.order.authorize().then(src_util_noop);
                         throw new Error("Unsupported intent for auto-capture: " + intent);
                     };
-                }(intent) : _ref7$onApprove, partnerAttributionID = _ref7.partnerAttributionID, onError = _ref7.onError, clientAccessToken = _ref7.clientAccessToken, vault = _ref7.vault, clientID = _ref7.clientID, facilitatorAccessToken = _ref7.facilitatorAccessToken, branded = _ref7.branded, createOrder = _ref7.createOrder, paymentSource = _ref7.paymentSource;
+                }(intent) : _ref7$onApprove, partnerAttributionID = _ref7.partnerAttributionID, onError = _ref7.onError, clientAccessToken = _ref7.clientAccessToken, vault = _ref7.vault, facilitatorAccessToken = _ref7.facilitatorAccessToken, branded = _ref7.branded, createOrder = _ref7.createOrder, paymentSource = _ref7.paymentSource, featureFlags = _ref7.featureFlags;
                 if (!onApprove) throw new Error("Expected onApprove");
-                var upgradeLSAT = -1 === LSAT_UPGRADE_EXCLUDED_MERCHANTS.indexOf(clientID);
                 return memoize((function(_ref8, _ref9) {
-                    var _ref8$accelerated = _ref8.accelerated, accelerated = void 0 !== _ref8$accelerated && _ref8$accelerated, payerID = _ref8.payerID, paymentID = _ref8.paymentID, billingToken = _ref8.billingToken, buyerAccessToken = _ref8.buyerAccessToken, authCode = _ref8.authCode, _ref8$forceRestAPI = _ref8.forceRestAPI, forceRestAPI = void 0 === _ref8$forceRestAPI ? upgradeLSAT : _ref8$forceRestAPI;
+                    var _ref8$accelerated = _ref8.accelerated, accelerated = void 0 !== _ref8$accelerated && _ref8$accelerated, payerID = _ref8.payerID, paymentID = _ref8.paymentID, billingToken = _ref8.billingToken, buyerAccessToken = _ref8.buyerAccessToken, authCode = _ref8.authCode, _ref8$forceRestAPI = _ref8.forceRestAPI, forceRestAPI = void 0 === _ref8$forceRestAPI ? featureFlags.isLsatUpgradable : _ref8$forceRestAPI;
                     var restart = _ref9.restart;
                     return createOrder().then((function(orderID) {
                         var _getLogger$info$track;
@@ -8324,11 +8315,11 @@ window.smartCard = function(modules) {
                 onError: onError,
                 clientAccessToken: clientAccessToken,
                 vault: vault,
-                clientID: clientID,
                 facilitatorAccessToken: facilitatorAccessToken,
                 branded: branded,
                 createOrder: createOrder,
-                paymentSource: paymentSource
+                paymentSource: paymentSource,
+                featureFlags: featureFlags
             });
             if ("tokenize" === intent) return function(_ref13) {
                 var _ref13$onApprove = _ref13.onApprove, onApprove = void 0 === _ref13$onApprove ? function() {
@@ -8377,14 +8368,13 @@ window.smartCard = function(modules) {
             facilitatorAccessToken: facilitatorAccessToken,
             branded: branded,
             createOrder: createOrder,
-            paymentSource: paymentSource
+            paymentSource: paymentSource,
+            featureFlags: featureFlags
         });
         var onComplete = function(_ref2) {
-            var intent = _ref2.intent, onComplete = _ref2.onComplete, partnerAttributionID = _ref2.partnerAttributionID, onError = _ref2.onError, facilitatorAccessToken = _ref2.facilitatorAccessToken, createOrder = _ref2.createOrder;
-            if (!onComplete) return promiseNoop;
-            var upgradeLSAT = -1 === LSAT_UPGRADE_EXCLUDED_MERCHANTS.indexOf(_ref2.clientID);
-            return memoize((function(_ref3) {
-                var buyerAccessToken = _ref3.buyerAccessToken, _ref3$forceRestAPI = _ref3.forceRestAPI, forceRestAPI = void 0 === _ref3$forceRestAPI ? upgradeLSAT : _ref3$forceRestAPI;
+            var intent = _ref2.intent, onComplete = _ref2.onComplete, partnerAttributionID = _ref2.partnerAttributionID, onError = _ref2.onError, facilitatorAccessToken = _ref2.facilitatorAccessToken, createOrder = _ref2.createOrder, featureFlags = _ref2.featureFlags;
+            return onComplete ? memoize((function(_ref3) {
+                var buyerAccessToken = _ref3.buyerAccessToken, _ref3$forceRestAPI = _ref3.forceRestAPI, forceRestAPI = void 0 === _ref3$forceRestAPI ? featureFlags.isLsatUpgradable : _ref3$forceRestAPI;
                 return createOrder().then((function(orderID) {
                     var _getLogger$info$track;
                     getLogger().info("button_complete").track((_getLogger$info$track = {}, _getLogger$info$track.transition_name = "process_checkout_complete", 
@@ -8426,7 +8416,7 @@ window.smartCard = function(modules) {
                         }));
                     }));
                 }));
-            }));
+            })) : promiseNoop;
         }({
             intent: intent,
             onComplete: xprops.onComplete,
@@ -8434,7 +8424,8 @@ window.smartCard = function(modules) {
             onError: onError,
             clientID: clientID,
             facilitatorAccessToken: facilitatorAccessToken,
-            createOrder: createOrder
+            createOrder: createOrder,
+            featureFlags: featureFlags
         });
         var onCancel = function(_ref2, _ref3) {
             var _ref2$onCancel = _ref2.onCancel, onCancel = void 0 === _ref2$onCancel ? promiseNoop : _ref2$onCancel, onError = _ref2.onError;
@@ -8476,11 +8467,10 @@ window.smartCard = function(modules) {
             createOrder: createOrder
         });
         var onShippingChange = function(_ref2, _ref3) {
-            var onShippingChange = _ref2.onShippingChange, partnerAttributionID = _ref2.partnerAttributionID;
+            var onShippingChange = _ref2.onShippingChange, partnerAttributionID = _ref2.partnerAttributionID, featureFlags = _ref2.featureFlags;
             var facilitatorAccessToken = _ref3.facilitatorAccessToken, createOrder = _ref3.createOrder;
-            var upgradeLSAT = -1 === LSAT_UPGRADE_EXCLUDED_MERCHANTS.indexOf(_ref2.clientID);
             if (onShippingChange) return function(_ref4, actions) {
-                var buyerAccessToken = _ref4.buyerAccessToken, _ref4$forceRestAPI = _ref4.forceRestAPI, forceRestAPI = void 0 === _ref4$forceRestAPI ? upgradeLSAT : _ref4$forceRestAPI, data = _objectWithoutPropertiesLoose(_ref4, _excluded);
+                var buyerAccessToken = _ref4.buyerAccessToken, _ref4$forceRestAPI = _ref4.forceRestAPI, forceRestAPI = void 0 === _ref4$forceRestAPI ? featureFlags.isLsatUpgradable : _ref4$forceRestAPI, data = _objectWithoutPropertiesLoose(_ref4, _excluded);
                 return createOrder().then((function(orderID) {
                     var _getLogger$info$track;
                     getLogger().info("button_shipping_change").track((_getLogger$info$track = {}, _getLogger$info$track.transition_name = "process_checkout_shipping_change", 
@@ -8523,7 +8513,7 @@ window.smartCard = function(modules) {
         }({
             onShippingChange: xprops.onShippingChange,
             partnerAttributionID: partnerAttributionID,
-            clientID: clientID
+            featureFlags: featureFlags
         }, {
             facilitatorAccessToken: facilitatorAccessToken,
             createOrder: createOrder
@@ -8586,40 +8576,38 @@ window.smartCard = function(modules) {
                                 return actions;
                             },
                             updateShippingOptions: function(_ref3) {
+                                var _selectedShippingOpti, _selectedShippingOpti2, _data$amount3;
                                 var options = _ref3.options;
-                                if (options && options.length > 0) {
-                                    var _selectedShippingOpti, _selectedShippingOpti2, _data$amount3;
-                                    var selectedShippingOption = options.filter((function(option) {
-                                        return !0 === option.selected;
-                                    }));
-                                    var selectedShippingOptionAmount = selectedShippingOption && (null == (_selectedShippingOpti = selectedShippingOption[0]) || null == (_selectedShippingOpti2 = _selectedShippingOpti.amount) ? void 0 : _selectedShippingOpti2.value);
-                                    breakdown = buildBreakdown({
-                                        breakdown: breakdown,
-                                        updatedAmounts: {
-                                            shipping: selectedShippingOptionAmount
-                                        }
-                                    });
-                                    newAmount = calculateTotalFromShippingBreakdownAmounts({
-                                        breakdown: breakdown,
-                                        updatedAmounts: {
-                                            shipping: selectedShippingOptionAmount
-                                        }
-                                    });
-                                    patchQueries[ON_SHIPPING_CHANGE_PATHS_AMOUNT] = {
-                                        op: "replace",
-                                        path: ON_SHIPPING_CHANGE_PATHS_AMOUNT,
-                                        value: {
-                                            value: "" + newAmount,
-                                            currency_code: null == data || null == (_data$amount3 = data.amount) ? void 0 : _data$amount3.currency_code,
-                                            breakdown: breakdown
-                                        }
-                                    };
-                                    patchQueries[ON_SHIPPING_CHANGE_PATHS_OPTIONS] = {
-                                        op: (null == data ? void 0 : data.event) || "replace",
-                                        path: ON_SHIPPING_CHANGE_PATHS_OPTIONS,
-                                        value: options
-                                    };
-                                }
+                                var selectedShippingOption = options.filter((function(option) {
+                                    return !0 === option.selected;
+                                }));
+                                var selectedShippingOptionAmount = selectedShippingOption && selectedShippingOption.length > 0 ? null == (_selectedShippingOpti = selectedShippingOption[0]) || null == (_selectedShippingOpti2 = _selectedShippingOpti.amount) ? void 0 : _selectedShippingOpti2.value : "0.00";
+                                breakdown = buildBreakdown({
+                                    breakdown: breakdown,
+                                    updatedAmounts: {
+                                        shipping: selectedShippingOptionAmount
+                                    }
+                                });
+                                newAmount = calculateTotalFromShippingBreakdownAmounts({
+                                    breakdown: breakdown,
+                                    updatedAmounts: {
+                                        shipping: selectedShippingOptionAmount
+                                    }
+                                });
+                                patchQueries[ON_SHIPPING_CHANGE_PATHS_AMOUNT] = {
+                                    op: "replace",
+                                    path: ON_SHIPPING_CHANGE_PATHS_AMOUNT,
+                                    value: {
+                                        value: "" + newAmount,
+                                        currency_code: null == data || null == (_data$amount3 = data.amount) ? void 0 : _data$amount3.currency_code,
+                                        breakdown: breakdown
+                                    }
+                                };
+                                patchQueries[ON_SHIPPING_CHANGE_PATHS_OPTIONS] = {
+                                    op: (null == data ? void 0 : data.event) || "replace",
+                                    path: ON_SHIPPING_CHANGE_PATHS_OPTIONS,
+                                    value: options
+                                };
                                 return actions;
                             },
                             updateShippingDiscount: function(_ref4) {
@@ -8850,13 +8838,12 @@ window.smartCard = function(modules) {
             createOrder: createOrder
         });
         var onAuth = function(_ref) {
-            var facilitatorAccessToken = _ref.facilitatorAccessToken, createOrder = _ref.createOrder, createSubscription = _ref.createSubscription;
-            var upgradeLSAT = -1 === LSAT_UPGRADE_EXCLUDED_MERCHANTS.indexOf(_ref.clientID);
+            var facilitatorAccessToken = _ref.facilitatorAccessToken, createOrder = _ref.createOrder, createSubscription = _ref.createSubscription, featureFlags = _ref.featureFlags;
             return function(_ref2) {
                 var accessToken = _ref2.accessToken;
                 getLogger().info("spb_onauth_access_token_" + (accessToken ? "present" : "not_present"));
                 return promise_ZalgoPromise.try((function() {
-                    if (accessToken) return upgradeLSAT ? createOrder().then((function(orderID) {
+                    if (accessToken) return featureFlags.isLsatUpgradable ? createOrder().then((function(orderID) {
                         return createSubscription ? accessToken : function(facilitatorAccessToken, _ref3) {
                             var _headers;
                             var buyerAccessToken = _ref3.buyerAccessToken, orderID = _ref3.orderID;
@@ -8896,7 +8883,7 @@ window.smartCard = function(modules) {
             facilitatorAccessToken: facilitatorAccessToken,
             createOrder: createOrder,
             createSubscription: createSubscription,
-            clientID: clientID
+            featureFlags: featureFlags
         });
         return {
             uid: uid,
@@ -8968,7 +8955,8 @@ window.smartCard = function(modules) {
         return _extends({}, getProps({
             facilitatorAccessToken: facilitatorAccessToken,
             branded: branded,
-            paymentSource: null
+            paymentSource: null,
+            featureFlags: _ref.featureFlags
         }), {
             type: type,
             branded: branded,
@@ -9085,7 +9073,8 @@ window.smartCard = function(modules) {
     function submitCardFields(_ref) {
         var extraFields = _ref.extraFields;
         var _getCardProps = getCardProps({
-            facilitatorAccessToken: _ref.facilitatorAccessToken
+            facilitatorAccessToken: _ref.facilitatorAccessToken,
+            featureFlags: _ref.featureFlags
         }), intent = _getCardProps.intent, branded = _getCardProps.branded, vault = _getCardProps.vault, createOrder = _getCardProps.createOrder, onApprove = _getCardProps.onApprove, clientID = _getCardProps.clientID;
         interface_resetGQLErrors();
         return promise_ZalgoPromise.try((function() {
@@ -9866,7 +9855,7 @@ window.smartCard = function(modules) {
         }));
     }
     function Page(_ref) {
-        var cspNonce = _ref.cspNonce, props = _ref.props;
+        var cspNonce = _ref.cspNonce, props = _ref.props, featureFlags = _ref.featureFlags;
         var facilitatorAccessToken = props.facilitatorAccessToken, style = props.style, disableAutocomplete = props.disableAutocomplete, placeholder = props.placeholder, type = props.type, onChange = props.onChange, xport = props.export;
         var _useState = hooks_module_p(), fieldValue = _useState[0], setFieldValue = _useState[1];
         var _useState2 = hooks_module_p(!1), fieldValid = _useState2[0], setFieldValid = _useState2[1];
@@ -9968,7 +9957,8 @@ window.smartCard = function(modules) {
                     }(extraData);
                     return submitCardFields({
                         facilitatorAccessToken: facilitatorAccessToken,
-                        extraFields: extraFields
+                        extraFields: extraFields,
+                        featureFlags: featureFlags
                     });
                 }
             });
@@ -10040,11 +10030,14 @@ window.smartCard = function(modules) {
         }) : null);
     }
     function setupCard(_ref3) {
+        var featureFlags = _ref3.featureFlags;
         u = h(Page, {
             cspNonce: _ref3.cspNonce,
             props: getCardProps({
-                facilitatorAccessToken: _ref3.facilitatorAccessToken
-            })
+                facilitatorAccessToken: _ref3.facilitatorAccessToken,
+                featureFlags: featureFlags
+            }),
+            featureFlags: featureFlags
         }), i = util_getBody(), l.__ && l.__(u, i), r = !1 ? null : i.__k, e = [], j(i, u = i.__k = h(p, null, [ u ]), r || f, f, void 0 !== i.ownerSVGElement, r ? null : i.firstChild ? n.call(i.childNodes) : null, e, r ? r.__e : i.firstChild, !1), 
         z(e, u);
         var u, i, r, e;

@@ -7406,6 +7406,7 @@ window.smartCard = function(modules) {
             var config = {
                 f: clientMetadataID,
                 s: "SMART_PAYMENT_BUTTONS",
+                u: window.xprops.buttonLocation,
                 cb1: "fnCallback"
             };
             "sandbox" === env && (config.sandbox = !0);

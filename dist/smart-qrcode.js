@@ -687,7 +687,7 @@
             var r, f, e;
             if (void 0 !== l.__d) r = l.__d, l.__d = void 0; else if (null == u || t != o || null == t.parentNode) n: if (null == o || o.parentNode !== n) n.appendChild(t), 
             r = null; else {
-                for (f = o, e = 0; (f = f.nextSibling) && e < i.length; e += 2) if (f == t) break n;
+                for (f = o, e = 0; (f = f.nextSibling) && e < i.length; e += 1) if (f == t) break n;
                 n.insertBefore(t, o), r = o;
             }
             return void 0 !== r ? r : t.nextSibling;
@@ -891,7 +891,6 @@
             }
         }
         l.__b = function(n) {
-            "function" != typeof n.type || n.__m || null === n.__ ? n.__m || (n.__m = n.__ && n.__.__m ? n.__.__m : "") : n.__m = (n.__ && n.__.__m ? n.__.__m : "") + (n.__ && n.__.__k ? n.__.__k.indexOf(n) : 0), 
             hooks_module_r = null, hooks_module_e && hooks_module_e(n);
         }, l.__r = function(n) {
             hooks_module_a && hooks_module_a(n), hooks_module_t = 0;
@@ -3184,7 +3183,7 @@
             logger.addTrackingBuilder((function() {
                 var _ref2;
                 return (_ref2 = {}).state_name = "smart_button", _ref2.context_type = "EC-Token", 
-                _ref2.context_id = orderID, _ref2.button_session_id = buttonSessionID, _ref2.button_version = "5.0.119", 
+                _ref2.context_id = orderID, _ref2.button_session_id = buttonSessionID, _ref2.button_version = "5.0.120", 
                 _ref2.user_id = buttonSessionID, _ref2;
             }));
             (function() {

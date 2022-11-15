@@ -74,7 +74,7 @@ type TriggerIntegrationErrorOptions = {|
 |};
 
 function triggerIntegrationError({ error, message = error, orderID, loggerPayload = {}, throwError = true, featureFlags } : TriggerIntegrationErrorOptions) {
-    const shouldThrowError = throwError && !featureFlags.shouldThrowIntegrationError;
+    const shouldThrowError = throwError && featureFlags.shouldThrowIntegrationError;
 
     getLogger()
         .warn(error, loggerPayload)

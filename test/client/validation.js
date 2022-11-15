@@ -55,7 +55,7 @@ describe('validation cases', () => {
 
             window.xprops.onInit = mockAsyncProp(expect('onInit', (data, actions) => {
                 return actions.disable().then(async () => {
-                    
+
                     onClick = mockAsyncProp(expect('onClick', () => ZalgoPromise.resolve()));
                     window.xprops.createOrder = avoid('createOrder', () => ZalgoPromise.delay(50).then(() => orderID));
                     window.xprops.onApprove = avoid('onApprove', () => ZalgoPromise.resolve());
@@ -99,7 +99,7 @@ describe('validation cases', () => {
             }));
             window.xprops.createOrder = mockAsyncProp(expect('createOrder', () => ZalgoPromise.delay(50).then(() => orderID)));
             window.xprops.onApprove = mockAsyncProp(expect('onApprove', () => ZalgoPromise.resolve()));
-            
+
             createButtonHTML();
             await mockSetupButton({ merchantID: [ 'XYZ12345' ], fundingEligibility: DEFAULT_FUNDING_ELIGIBILITY });
             await clickButton(FUNDING.PAYPAL);
@@ -1078,4 +1078,81 @@ describe('validation cases', () => {
             gqlMock.done();
         });
     });
+
+
+
+it('should not throw integration error when `shouldThrowIntegrationError` is set to false and intent is incorrect', async () => {
+        return await wrapPromise(async ({ expect }) => {
+
+            const orderID = generateOrderID();
+            const payerID = 'AAABBBCCC';
+
+            window.xprops.intent = INTENT.CAPTURE;
+
+            const gqlMock = getGraphQLApiMock({
+                extraHandler: expect('checkoutGQLCall', ({ data }) => {
+
+                    if (data.query.includes('query GetCheckoutDetails')) {
+                        return {
+                            data: {
+                                checkoutSession: {
+                                    cart: {
+                                        intent:  'ORDER',
+                                        amounts: {
+                                            total: {
+                                                currencyCode: 'USD'
+                                            }
+                                        },
+                                        supplementary: {
+                                            initiationIntent: 'ORDER'
+                                        }
+                                    },
+                                    payees: [
+                                        {
+                                            merchantId: 'XYZ12345',
+                                            email:       {
+                                                stringValue: 'xyz-us-b1@paypal.com'
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        };
+                    }
+                })
+            }).expectCalls();
+
+            window.xprops.createOrder = mockAsyncProp(expect('createOrder', async () => {
+                return ZalgoPromise.try(() => {
+                    return orderID;
+                });
+            }));
+
+            window.xprops.onApprove = mockAsyncProp(expect('onApprove', expect('onApprove', async (data) => {
+
+                if (data.orderID !== orderID) {
+                    throw new Error(`Expected orderID to be ${ orderID }, got ${ data.orderID }`);
+                }
+
+                if (data.payerID !== payerID) {
+                    throw new Error(`Expected payerID to be ${ payerID }, got ${ data.payerID }`);
+                }
+            })));
+
+            createButtonHTML();
+
+          await mockSetupButton({
+            merchantID: [ 'XYZ12345' ],
+            fundingEligibility: DEFAULT_FUNDING_ELIGIBILITY,
+            featureFlags: {
+              isLsatUpgradable: true,
+              shouldThrowIntegrationError: false,
+            }
+          });
+
+            await clickButton(FUNDING.PAYPAL);
+            gqlMock.done();
+        });
+    });
+
 });

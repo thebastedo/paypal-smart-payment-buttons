@@ -34,7 +34,7 @@ export function promiseNoop() : ZalgoPromise<void> {
 
 export function mockAsyncProp(handler? : Function = noop, time? : number = 1) : Function {
     const currentPromise = new ZalgoPromise();
-    
+
     const asyncHandler = (...args) => {
         return ZalgoPromise.delay(time).then(() => handler(...args)).then((res) => {
             ZalgoPromise.delay(time).then(() => currentPromise.resolve(res)).catch(noop);
@@ -44,7 +44,7 @@ export function mockAsyncProp(handler? : Function = noop, time? : number = 1) : 
             throw err;
         });
     };
-    
+
     asyncHandler.await = () => currentPromise;
 
     return asyncHandler;
@@ -516,7 +516,7 @@ export function createCardFieldsContainerHTML(type : string = 'single') : mixed 
     if (!body) {
         throw new Error('No document.body found');
     }
-    
+
     body.innerHTML += fields.join('\n');
 
     return document.querySelector(`#card-fields-${ type }-container`);
@@ -1529,7 +1529,7 @@ export function getNativeFirebaseMock({ sessionUID, extraHandler } : {| sessionU
             message_type:       'request',
             message_name:       'onCancel',
             message_data:       {
-                
+
             }
         }));
     };
@@ -1632,7 +1632,8 @@ export async function mockSetupButton(options : $Shape<SetupButtonOptions> = {})
         },
         sdkMeta: MOCK_SDK_META,
         featureFlags: {
-            isLsatUpgradable: true
+            isLsatUpgradable: true,
+            shouldThrowIntegrationError: true
         },
         ...options
     });
@@ -1647,7 +1648,7 @@ export async function mockSetupCardFields() : Promise<void> {
 }
 
 export function setCardFieldsValues({ number, expiry, cvv, name } : {| number? : string, expiry? : string, cvv? : string, name? : string |}) : mixed {
-    
+
     const numberInput = number ? document.getElementsByName('number')[0] : null;
     const expiryInput = expiry ? document.getElementsByName('expiry')[0] : null;
     const cvvInput = cvv ? document.getElementsByName('cvv')[0] : null;
@@ -1849,7 +1850,7 @@ export function getMockWindowOpen({ expectedUrl, times = 1, appSwitch = false, e
 
     let win : ?CrossDomainWindowType;
     let winOpts : ?{| [string] : string |};
-    
+
 
     const _onLoad = (url) => {
         if (!win) {
@@ -1997,7 +1998,7 @@ export function getMockWindowOpen({ expectedUrl, times = 1, appSwitch = false, e
         }
 
         win.location = url;
-        
+
         return ZalgoPromise.delay(10);
     };
 

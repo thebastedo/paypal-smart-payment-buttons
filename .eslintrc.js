@@ -2,7 +2,7 @@
 
 // eslint-disable-next-line import/no-commonjs
 module.exports = {
-    'extends': require.resolve('@krakenjs/grumbler-scripts/config/.eslintrc-browser'),
+    'extends':  '@krakenjs/eslint-config-grumbler/eslintrc-browser',
 
     'rules': {
         'react/display-name': 'off',
@@ -16,7 +16,9 @@ module.exports = {
     'globals': {
         '__SMART_BUTTONS__': true,
         'paypal': true,
-        '$Shape': true
+        '$Shape': true,
+        'afterAll': true,
+        'jest': true
     },
     'overrides': [{
         'files': ['**/*.test.js'],

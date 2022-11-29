@@ -17,7 +17,12 @@
     ],
     "globals": {
       "__DEBUG__": true
-    }
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/fixtures/",
+      "<rootDir>/src/button/logger.test.js"
+    ]
   },
   "files": [
     "dist",
@@ -39,11 +44,12 @@
     "build-commit": "npm run build && git add dist && (git commit -m 'Dist' || echo 'Nothing to commit') && git push",
     "cdnify": "grabthar-cdnify --cdn=https://www.paypalobjects.com",
     "clean": "rimraf dist coverage",
+    "coverage": "vitest run --coverage",
     "debug": "cross-env NODE_ENV=debug",
     "deploy": "npm run cdnify",
     "flow": "flow",
     "flow-typed": "rm -rf ./flow-typed && flow-typed install --ignoreDeps peer && flow-typed install jest@24 mocha@4 && flow-typed install express@4.16 && sed -i -e 's/http$IncomingMessage,/http$IncomingMessage<>,/g' ./flow-typed/npm/express_v4.16.x.js",
-    "jest:client": "jest src/ --collectCoverage --collectCoverageFrom='src/' --testPathIgnorePatterns=/fixtures/ --no-cache --runInBand --env=jsdom",
+    "jest:client": "jest src/ --collectCoverage --collectCoverageFrom='src/' --no-cache --runInBand --env=jsdom",
     "karma": "cross-env NODE_ENV=test babel-node --plugins=transform-es2015-modules-commonjs ./node_modules/.bin/karma start",
     "lint": "eslint --ext .js --ext .jsx src/ test/ *.js",
     "postactivate": "npm run cdnify -- --commitonly",
@@ -55,10 +61,12 @@
     "release:cli": "rm -rf node_modules && npm i && npm run all-ci && npm run build-commit && grabthar-release",
     "release:dry-run": "DRY_RUN=true grabthar-release",
     "setup": "npm install && npm run flow-typed",
-    "test": "npm run karma && npm run jest:client",
+    "test": "npm run karma && npm run jest:client && npm run vitest",
     "typecheck": "npm run flow-typed && npm run flow -- check",
+    "vitest": "vitest",
     "webpack": "babel-node --plugins=transform-es2015-modules-commonjs ./node_modules/.bin/webpack --progress",
-    "webpack:release": "babel-node --plugins=transform-es2015-modules-commonjs ./node_modules/.bin/webpack"
+    "webpack:release": "babel-node --plugins=transform-es2015-modules-commonjs ./node_modules/.bin/webpack",
+    "prepare": "husky install"
   },
   "peerDependencies": {
     "express": "^4.16.3"
@@ -89,16 +97,27 @@
     "typed-graphqlify": "^2.2.3"
   },
   "devDependencies": {
+    "@bunchtogether/vite-plugin-flow": "^1.0.2",
     "@krakenjs/grabthar-release": "^3.0.0",
     "@krakenjs/grumbler-scripts": "^8.0.4",
     "@krakenjs/sync-browser-mocks": "^3.0.0",
     "@krakenjs/webpack-mem-compile": "^2.0.1",
+    "@vitest/ui": "^0.25.3",
     "babel-core": "^7.0.0-bridge.0",
     "cross-env": "^7.0.3",
     "express": "^4.16.3",
     "flow-bin": "0.155.0",
     "flow-typed": "^3.8.0",
-    "jest": "^27"
+    "happy-dom": "^7.7.0",
+    "husky": "^8.0.2",
+    "jest": "^27.5.1",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
+    "vite": "^3.2.4",
+    "vitest": "^0.25.3"
+  },
+  "lint-staged": {
+    "**/button/logger.test.js": "prettier --write"
   },
   "license": "Apache-2.0"
 }

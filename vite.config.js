@@ -10,26 +10,39 @@
 import { defineConfig } from "vite";
 import { flowPlugin, esbuildFlowPlugin } from "@bunchtogether/vite-plugin-flow";
 
- 
+const define = {
+  __DEBUG__: false,
+  __TEST__: true,
+  __POST_ROBOT__: JSON.stringify({
+    __GLOBAL_KEY__: `__post_robot__`,
+    __AUTO_SETUP__: false,
+    __IE_POPUP_SUPPORT__: false,
+    __GLOBAL_MESSAGE_SUPPORT__: true,
+    __SCRIPT_NAMESPACE__: false,
+  }),
+  __SMART_BUTTONS__: JSON.stringify({
+    _MAJOR_VERSION__: "",
+    __MINOR_VERSION__: "",
+  }),
+};
+
 // $FlowIssue
 export default defineConfig({
   esbuild: {
-    define: {
-      __DEBUG__: false,
-    },
+    define,
   },
-  define: {
-    __DEBUG__: false,
-  },
+  define,
   test: {
-    environment: "happy-dom",
-    include: ['**/button/logger.test.js']
+    environment: "jsdom",
+    setupFiles: ["vitestSetup.js"],
+    include: ["**/button/logger.test.js", "**/tests/**/*.test.js"],
+    deps: {
+      inline: ["@krakenjs/post-robot"],
+    },
   },
   optimizeDeps: {
     esbuildOptions: {
-      plugins: [
-        esbuildFlowPlugin(),
-      ],
+      plugins: [esbuildFlowPlugin()],
     },
   },
   plugins: [

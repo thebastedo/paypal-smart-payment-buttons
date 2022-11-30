@@ -117,7 +117,9 @@
     "vitest": "^0.25.3"
   },
   "lint-staged": {
-    "**/button/logger.test.js": "prettier --write"
+    "vite.config.js": "prettier --write",
+    "**/button/logger.test.js": "prettier --write",
+    "**/tests/*.{js}": "prettier --write"
   },
   "license": "Apache-2.0"
 }

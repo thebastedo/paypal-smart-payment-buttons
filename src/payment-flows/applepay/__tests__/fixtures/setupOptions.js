@@ -196,6 +196,9 @@ export default {
       multibanco: {
         eligible: false,
       },
+      satispay: {
+        eligible: false,
+      },
     },
     wallet: {
       paypal: {

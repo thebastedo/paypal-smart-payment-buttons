@@ -7695,9 +7695,9 @@ window.spb = function(modules) {
             })), S.d(N, "DEFAULT_INTENT", (function() {
                 return u;
             })), S.d(N, "DEFAULT_COMMIT", (function() {
-                return L;
-            })), S.d(N, "DEFAULT_SALE_COMMIT", (function() {
                 return P;
+            })), S.d(N, "DEFAULT_SALE_COMMIT", (function() {
+                return L;
             })), S.d(N, "DEFAULT_NONSALE_COMMIT", (function() {
                 return d;
             })), S.d(N, "DEFAULT_VAULT", (function() {
@@ -8392,7 +8392,7 @@ window.spb = function(modules) {
                 SEARCH_RESULTS: "search-results",
                 PRODUCT_DETAILS: "product-details",
                 MINI_CART: "mini-cart"
-            }, C = 10, a = R.US, Z = r.USD, u = e.CAPTURE, L = n.TRUE, P = n.TRUE, d = n.TRUE, c = A.FALSE, U = D.BUTTONS, B = H.FALSE, s = {
+            }, C = 10, a = R.US, Z = r.USD, u = e.CAPTURE, P = n.TRUE, L = n.TRUE, d = n.TRUE, c = A.FALSE, U = D.BUTTONS, B = H.FALSE, s = {
                 LOCAL: "local",
                 STAGE: "stage",
                 SANDBOX: "sandbox",
@@ -8456,6 +8456,8 @@ window.spb = function(modules) {
                 PAYMENT_FLOW: "payment_flow",
                 BUTTON_VERSION: "button_version",
                 FI_LIST: "fi_list",
+                FI_ID: "fi_id",
+                PRODUCT: "product",
                 CHOSEN_FI_TYPE: "chosen_fi_type",
                 SELECTED_FI: "merchant_selected_funding_source",
                 POTENTIAL_PAYMENT_METHODS: "potential_payment_methods",
@@ -8505,7 +8507,8 @@ window.spb = function(modules) {
                 WECHATPAY: "wechatpay",
                 MERCADOPAGO: "mercadopago",
                 MULTIBANCO: "multibanco",
-                SATISPAY: "satispay"
+                SATISPAY: "satispay",
+                PAIDY: "paidy"
             }, y = {
                 PAYPAL: "PayPal",
                 CREDIT: "PayPal Credit"
@@ -8531,7 +8534,7 @@ window.spb = function(modules) {
             }, h = {
                 DESKTOP: "desktop",
                 MOBILE: "mobile"
-            }, k = !0, g = [ m.IDEAL, m.BANCONTACT, m.GIROPAY, m.SOFORT, m.EPS, m.MYBANK, m.P24, m.PAYU, m.BLIK, m.TRUSTLY, m.ZIMPLER, m.MAXIMA, m.OXXO, m.BOLETO, m.BOLETOBANCARIO, m.WECHATPAY, m.MERCADOPAGO, m.MULTIBANCO, m.SATISPAY ];
+            }, k = !0, g = [ m.IDEAL, m.BANCONTACT, m.GIROPAY, m.SOFORT, m.EPS, m.MYBANK, m.P24, m.PAYU, m.BLIK, m.TRUSTLY, m.ZIMPLER, m.MAXIMA, m.OXXO, m.BOLETO, m.BOLETOBANCARIO, m.WECHATPAY, m.MERCADOPAGO, m.MULTIBANCO, m.SATISPAY, m.PAIDY ];
         } ]);
     },
     "./node_modules/@paypal/sdk-constants/index.js": function(module, exports, __webpack_require__) {
@@ -9378,6 +9381,8 @@ window.spb = function(modules) {
             PAYMENT_FLOW: "payment_flow",
             BUTTON_VERSION: "button_version",
             FI_LIST: "fi_list",
+            FI_ID: "fi_id",
+            PRODUCT: "product",
             CHOSEN_FI_TYPE: "chosen_fi_type",
             SELECTED_FI: "merchant_selected_funding_source",
             POTENTIAL_PAYMENT_METHODS: "potential_payment_methods",
@@ -9432,7 +9437,8 @@ window.spb = function(modules) {
             WECHATPAY: "wechatpay",
             MERCADOPAGO: "mercadopago",
             MULTIBANCO: "multibanco",
-            SATISPAY: "satispay"
+            SATISPAY: "satispay",
+            PAIDY: "paidy"
         };
         var FUNDING_BRAND_LABEL = {
             PAYPAL: "PayPal",
@@ -9465,7 +9471,7 @@ window.spb = function(modules) {
             MOBILE: "mobile"
         };
         var TYPES = !0;
-        var APM_LIST = [ FUNDING.IDEAL, FUNDING.BANCONTACT, FUNDING.GIROPAY, FUNDING.SOFORT, FUNDING.EPS, FUNDING.MYBANK, FUNDING.P24, FUNDING.PAYU, FUNDING.BLIK, FUNDING.TRUSTLY, FUNDING.ZIMPLER, FUNDING.MAXIMA, FUNDING.OXXO, FUNDING.BOLETO, FUNDING.BOLETOBANCARIO, FUNDING.WECHATPAY, FUNDING.MERCADOPAGO, FUNDING.MULTIBANCO, FUNDING.SATISPAY ];
+        var APM_LIST = [ FUNDING.IDEAL, FUNDING.BANCONTACT, FUNDING.GIROPAY, FUNDING.SOFORT, FUNDING.EPS, FUNDING.MYBANK, FUNDING.P24, FUNDING.PAYU, FUNDING.BLIK, FUNDING.TRUSTLY, FUNDING.ZIMPLER, FUNDING.MAXIMA, FUNDING.OXXO, FUNDING.BOLETO, FUNDING.BOLETOBANCARIO, FUNDING.WECHATPAY, FUNDING.MERCADOPAGO, FUNDING.MULTIBANCO, FUNDING.SATISPAY, FUNDING.PAIDY ];
     },
     "./node_modules/card-validator/dist/card-number.js": function(module, exports, __webpack_require__) {
         "use strict";
@@ -10855,7 +10861,7 @@ window.spb = function(modules) {
             Object(lib.getLogger)().info("rest_api_create_order_token");
             var headers = ((_headers15 = {})[constants.HEADERS.AUTHORIZATION] = "Bearer " + accessToken, 
             _headers15[constants.HEADERS.PARTNER_ATTRIBUTION_ID] = partnerAttributionID, _headers15[constants.HEADERS.CLIENT_METADATA_ID] = clientMetadataID, 
-            _headers15[constants.HEADERS.APP_NAME] = constants.SMART_PAYMENT_BUTTONS, _headers15[constants.HEADERS.APP_VERSION] = "5.0.120", 
+            _headers15[constants.HEADERS.APP_NAME] = constants.SMART_PAYMENT_BUTTONS, _headers15[constants.HEADERS.APP_VERSION] = "5.0.121", 
             _headers15);
             var paymentSource = {
                 token: {
@@ -10973,14 +10979,16 @@ window.spb = function(modules) {
         }
         function oneClickApproveOrder(_ref21) {
             var _headers20;
-            var orderID = _ref21.orderID, clientMetadataID = _ref21.clientMetadataID;
+            var orderID = _ref21.orderID, clientMetadataID = _ref21.clientMetadataID, _ref21$useExistingPla = _ref21.useExistingPlanning;
             return callGraphQL({
                 name: "OneClickApproveOrder",
-                query: "\n            mutation OneClickApproveOrder(\n                $orderID : String!\n                $instrumentType : String!\n                $instrumentID : String!\n            ) {\n                oneClickPayment(\n                    token: $orderID\n                    selectedInstrumentType : $instrumentType\n                    selectedInstrumentId : $instrumentID\n                ) {\n                    userId\n                    auth {\n                        accessToken\n                    }\n                }\n            }\n        ",
+                query: "\n            mutation OneClickApproveOrder(\n                $orderID : String!\n                $instrumentType : String!\n                $instrumentID : String!\n                $planID: String\n                $useExistingPlanning: Boolean\n            ) {\n                oneClickPayment(\n                    token: $orderID\n                    selectedInstrumentType : $instrumentType\n                    selectedInstrumentId : $instrumentID\n                    selectedPlanId: $planID\n                    useExistingPlanning: $useExistingPlanning\n                ) {\n                    userId\n                    auth {\n                        accessToken\n                    }\n                }\n            }\n        ",
                 variables: {
                     orderID: orderID,
                     instrumentType: _ref21.instrumentType,
-                    instrumentID: _ref21.instrumentID
+                    instrumentID: _ref21.instrumentID,
+                    planID: _ref21.planID,
+                    useExistingPlanning: void 0 !== _ref21$useExistingPla && _ref21$useExistingPla
                 },
                 headers: (_headers20 = {}, _headers20[constants.HEADERS.ACCESS_TOKEN] = _ref21.buyerAccessToken, 
                 _headers20[constants.HEADERS.CLIENT_CONTEXT] = orderID, _headers20[constants.HEADERS.CLIENT_METADATA_ID] = clientMetadataID || orderID, 
@@ -11787,7 +11795,7 @@ window.spb = function(modules) {
         var TYPES = !0;
         function getButtonProps(_ref) {
             var _branded;
-            var facilitatorAccessToken = _ref.facilitatorAccessToken, paymentSource = _ref.paymentSource, featureFlags = _ref.featureFlags;
+            var facilitatorAccessToken = _ref.facilitatorAccessToken, paymentSource = _ref.paymentSource, featureFlags = _ref.featureFlags, enableOrdersApprovalSmartWallet = _ref.enableOrdersApprovalSmartWallet, smartWalletOrderID = _ref.smartWalletOrderID;
             var xprops = window.xprops;
             var buttonSessionID = xprops.buttonSessionID, style = xprops.style, branded = xprops.branded, experience = xprops.experience, intent = xprops.intent;
             branded = null != (_branded = branded) ? _branded : _ref.brandedDefault;
@@ -11812,7 +11820,9 @@ window.spb = function(modules) {
                 facilitatorAccessToken: facilitatorAccessToken,
                 branded: branded,
                 paymentSource: paymentSource,
-                featureFlags: featureFlags
+                featureFlags: featureFlags,
+                enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                smartWalletOrderID: smartWalletOrderID
             }), {
                 style: style,
                 buttonSessionID: buttonSessionID,
@@ -11863,6 +11873,9 @@ window.spb = function(modules) {
                 personalization: _ref3.personalization,
                 featureFlags: _ref3.featureFlags
             };
+        }
+        function getButtons() {
+            return Object(src.querySelectorAll)("[ " + constants.DATA_ATTRIBUTES.FUNDING_SOURCE + " ]");
         }
         function enableLoadingSpinner(button) {
             button.classList.add(constants.CLASS.LOADING);
@@ -12714,7 +12727,8 @@ window.spb = function(modules) {
                                     var _getLogger$info$track;
                                     Object(lib.getLogger)().info("connect_redirect", {
                                         connectURL: connectURL
-                                    }).track((_getLogger$info$track = {}, _getLogger$info$track[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.CONNECT_REDIRECT, 
+                                    }).track((_getLogger$info$track = {}, _getLogger$info$track[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                                    _getLogger$info$track[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.CONNECT_REDIRECT, 
                                     _getLogger$info$track[sdk_constants_src.FPTI_KEY.CONTEXT_TYPE] = constants.FPTI_CONTEXT_TYPE.ORDER_ID, 
                                     _getLogger$info$track[sdk_constants_src.FPTI_KEY.TOKEN] = orderID, _getLogger$info$track[sdk_constants_src.FPTI_KEY.CONTEXT_ID] = orderID, 
                                     _getLogger$info$track)).flush();
@@ -12770,9 +12784,62 @@ window.spb = function(modules) {
                                 return close().then(src.noop);
                             })).catch(src.noop);
                         },
-                        onAuth: function(_ref8) {
+                        onSmartWalletEligible: function(_ref8) {
+                            var eligibilityReason = _ref8.eligibilityReason, orderID = _ref8.orderID;
+                            var _ref9 = _ref8.locale || locale, country = _ref9.country, lang = _ref9.lang;
+                            var access_token = _ref8.accessToken || buyerAccessToken || "";
+                            if (window.innerWidth < 300 || buyerIntent === constants.BUYER_INTENT.PAY_WITH_DIFFERENT_FUNDING_SHIPPING || buyerIntent === constants.BUYER_INTENT.PAY_WITH_DIFFERENT_ACCOUNT) {
+                                var _getLogger$info$track2;
+                                Object(lib.getLogger)().info("checkout_smart_wallet_not_eligible ", {
+                                    buyerIntent: buyerIntent,
+                                    width: window.innerWidth
+                                }).track((_getLogger$info$track2 = {}, _getLogger$info$track2[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                                _getLogger$info$track2[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.ELIGIBILITY_CHECK, 
+                                _getLogger$info$track2[sdk_constants_src.FPTI_KEY.TRANSITION] = eligibilityReason + "_ineligible", 
+                                _getLogger$info$track2[sdk_constants_src.FPTI_KEY.CONTEXT_ID] = orderID, _getLogger$info$track2[sdk_constants_src.FPTI_KEY.CONTEXT_TYPE] = constants.FPTI_CONTEXT_TYPE.ORDER_ID, 
+                                _getLogger$info$track2)).flush();
+                                return zalgo_promise_src.ZalgoPromise.resolve({
+                                    smartWalletRendered: !1,
+                                    buyerIntent: buyerIntent
+                                });
+                            }
+                            _createOrder().then((function(walletOrderID) {
+                                var _getLogger$info$track3;
+                                Object(lib.getLogger)().info("checkout_smart_wallet_eligible ", {
+                                    buyerIntent: buyerIntent,
+                                    eligibilityReason: eligibilityReason
+                                }).track((_getLogger$info$track3 = {}, _getLogger$info$track3[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                                _getLogger$info$track3[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.ELIGIBILITY_CHECK, 
+                                _getLogger$info$track3[sdk_constants_src.FPTI_KEY.TRANSITION] = eligibilityReason + "_eligible", 
+                                _getLogger$info$track3[sdk_constants_src.FPTI_KEY.CONTEXT_ID] = walletOrderID, _getLogger$info$track3[sdk_constants_src.FPTI_KEY.CONTEXT_TYPE] = constants.FPTI_CONTEXT_TYPE.ORDER_ID, 
+                                _getLogger$info$track3)).flush().then((function() {
+                                    close().then((function() {
+                                        getButtons().forEach((function(smartButton) {
+                                            return enableLoadingSpinner(smartButton);
+                                        }));
+                                        Object(src.submitForm)({
+                                            url: document.location.href,
+                                            target: "_self",
+                                            body: {
+                                                buyerAccessToken: access_token,
+                                                smartWalletOrderID: walletOrderID,
+                                                enableOrdersApprovalSmartWallet: !0,
+                                                "locale.country": country,
+                                                "locale.lang": lang,
+                                                product: eligibilityReason
+                                            }
+                                        });
+                                    }));
+                                }));
+                            }));
+                            return zalgo_promise_src.ZalgoPromise.resolve({
+                                smartWalletRendered: !0,
+                                buyerIntent: buyerIntent
+                            });
+                        },
+                        onAuth: function(_ref10) {
                             return _onAuth({
-                                accessToken: _ref8.accessToken || buyerAccessToken
+                                accessToken: _ref10.accessToken || buyerAccessToken
                             }).then((function(token) {
                                 buyerAccessToken = token;
                             }));
@@ -12803,13 +12870,14 @@ window.spb = function(modules) {
                             }).catch(src.noop) : forceClosed || approved ? void 0 : _onCancel();
                         },
                         onError: function(err) {
-                            var _getLogger$info$track2;
+                            var _getLogger$info$track4;
                             Object(lib.getLogger)().info("checkout_flow_error ", {
                                 err: Object(src.stringifyError)(err)
-                            }).track((_getLogger$info$track2 = {}, _getLogger$info$track2[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.CHECKOUT_ERROR, 
-                            _getLogger$info$track2[sdk_constants_src.FPTI_KEY.EVENT_NAME] = constants.FPTI_TRANSITION.CHECKOUT_ERROR, 
-                            _getLogger$info$track2[sdk_constants_src.FPTI_KEY.ERROR_DESC] = Object(src.stringifyError)(err), 
-                            _getLogger$info$track2)).flush();
+                            }).track((_getLogger$info$track4 = {}, _getLogger$info$track4[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                            _getLogger$info$track4[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.CHECKOUT_ERROR, 
+                            _getLogger$info$track4[sdk_constants_src.FPTI_KEY.EVENT_NAME] = constants.FPTI_TRANSITION.CHECKOUT_ERROR, 
+                            _getLogger$info$track4[sdk_constants_src.FPTI_KEY.ERROR_DESC] = Object(src.stringifyError)(err), 
+                            _getLogger$info$track4)).flush();
                             return _onError(err);
                         },
                         dimensions: checkout_getDimensions(fundingSource),
@@ -12898,8 +12966,8 @@ window.spb = function(modules) {
                     close: close
                 };
             },
-            updateFlowClientConfig: function(_ref9) {
-                var orderID = _ref9.orderID, payment = _ref9.payment, userExperienceFlow = _ref9.userExperienceFlow, inlinexo = _ref9.inlinexo;
+            updateFlowClientConfig: function(_ref11) {
+                var orderID = _ref11.orderID, payment = _ref11.payment, userExperienceFlow = _ref11.userExperienceFlow, inlinexo = _ref11.inlinexo;
                 return zalgo_promise_src.ZalgoPromise.try((function() {
                     var buyerIntent = payment.buyerIntent, fundingSource = payment.fundingSource;
                     var productFlow = constants.PRODUCT_FLOW.SMART_PAYMENT_BUTTONS;
@@ -14087,15 +14155,17 @@ window.spb = function(modules) {
             },
             init: function(_ref5) {
                 var props = _ref5.props, components = _ref5.components, payment = _ref5.payment, serviceData = _ref5.serviceData, config = _ref5.config, fullRestart = _ref5.restart;
-                var createOrder = props.createOrder, onApprove = props.onApprove, clientMetadataID = props.clientMetadataID, vault = props.vault, onAuth = props.onAuth;
+                var createOrder = props.createOrder, onApprove = props.onApprove, clientMetadataID = props.clientMetadataID, vault = props.vault, onAuth = props.onAuth, enableOrdersApprovalSmartWallet = props.enableOrdersApprovalSmartWallet;
                 var fundingSource = payment.fundingSource, instrumentID = payment.instrumentID;
                 var wallet = serviceData.wallet;
                 if (!wallet || !smartWalletPromise) throw new Error("No smart wallet found");
                 if (!instrumentID) throw new Error("Instrument id required for wallet capture");
                 var instrument = getInstrument(wallet, fundingSource, instrumentID);
+                var planID = null == instrument ? void 0 : instrument.planID;
                 var createAccessToken = function() {
                     if (!smartWalletPromise) throw new Error("No smart wallet found");
-                    return smartWalletPromise.then((function(smartWallet) {
+                    var buyerAccessToken = Object(lib.getBuyerAccessToken)();
+                    return buyerAccessToken && enableOrdersApprovalSmartWallet ? buyerAccessToken : smartWalletPromise.then((function(smartWallet) {
                         var accessToken = getInstrument(smartWallet, fundingSource, instrumentID).accessToken;
                         if (!accessToken) throw new Error("Instrument access token not found");
                         return accessToken;
@@ -14120,7 +14190,7 @@ window.spb = function(modules) {
                     Object(lib.getLogger)().info("web_checkout_fallback").flush();
                     return getWebCheckoutFallback().start();
                 };
-                if (!instrument.oneClick || smartWalletErrored || vault) return getWebCheckoutFallback();
+                if (!instrument.oneClick || smartWalletErrored || vault && !enableOrdersApprovalSmartWallet) return getWebCheckoutFallback();
                 var restart = function() {
                     return fallbackToWebCheckout();
                 };
@@ -14135,11 +14205,12 @@ window.spb = function(modules) {
                             orderID: createOrder(),
                             smartWallet: smartWalletPromise
                         }).then((function(_ref6) {
-                            var orderID = _ref6.orderID;
-                            var buyerAccessToken = getInstrument(_ref6.smartWallet, fundingSource, instrumentID).accessToken;
+                            var orderID = _ref6.orderID, smartWallet = _ref6.smartWallet;
+                            var buyerAccessToken = enableOrdersApprovalSmartWallet && Object(lib.getBuyerAccessToken)() || getInstrument(smartWallet, fundingSource, instrumentID).accessToken;
                             if (!buyerAccessToken) throw new Error("No access token available for instrument");
                             var instrumentType = instrument.type;
                             if (!instrumentType) throw new Error("Instrument has no type");
+                            var useExistingPlanning = Boolean(props.smartWalletOrderID);
                             return zalgo_promise_src.ZalgoPromise.hash({
                                 requireShipping: shippingRequired(orderID),
                                 orderApproval: Object(api.oneClickApproveOrder)({
@@ -14147,7 +14218,9 @@ window.spb = function(modules) {
                                     instrumentType: instrumentType,
                                     buyerAccessToken: buyerAccessToken,
                                     instrumentID: instrumentID,
-                                    clientMetadataID: clientMetadataID
+                                    clientMetadataID: clientMetadataID,
+                                    planID: planID,
+                                    useExistingPlanning: useExistingPlanning
                                 }),
                                 onAuth: onAuth({
                                     accessToken: buyerAccessToken
@@ -14175,7 +14248,7 @@ window.spb = function(modules) {
             },
             setupMenu: function(_ref8) {
                 var props = _ref8.props, payment = _ref8.payment, serviceData = _ref8.serviceData, components = _ref8.components, config = _ref8.config, restart = _ref8.restart;
-                var createOrder = props.createOrder;
+                var createOrder = props.createOrder, enableOrdersApprovalSmartWallet = props.enableOrdersApprovalSmartWallet;
                 var fundingSource = payment.fundingSource, instrumentID = payment.instrumentID;
                 var wallet = serviceData.wallet, content = serviceData.content;
                 if (!wallet) throw new Error("Can not render wallet menu without wallet");
@@ -14193,13 +14266,14 @@ window.spb = function(modules) {
                     }).start();
                 };
                 var newFundingSource = instrument.type === sdk_constants_src.WALLET_INSTRUMENT.CREDIT ? sdk_constants_src.FUNDING.CREDIT : fundingSource;
-                if (fundingSource === sdk_constants_src.FUNDING.PAYPAL || fundingSource === sdk_constants_src.FUNDING.CREDIT) return [ {
+                var CHOOSE_FUNDING_SHIPPING = {
                     label: content.payWithDifferentMethod,
                     popup: wallet_capture_POPUP_OPTIONS,
                     onSelect: function(_ref10) {
                         var _getLogger$info$track;
                         var win = _ref10.win;
                         Object(lib.getLogger)().info("click_choose_funding").track((_getLogger$info$track = {}, 
+                        _getLogger$info$track[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
                         _getLogger$info$track[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.CLICK_CHOOSE_FUNDING, 
                         _getLogger$info$track[sdk_constants_src.FPTI_KEY.OPTION_SELECTED] = constants.FPTI_MENU_OPTION.CHOOSE_FUNDING, 
                         _getLogger$info$track)).flush();
@@ -14221,6 +14295,8 @@ window.spb = function(modules) {
                                     fundingSource: newFundingSource,
                                     createAccessToken: function() {
                                         return smartWalletPromise.then((function(smartWallet) {
+                                            var buyerAccessToken = Object(lib.getBuyerAccessToken)();
+                                            if (enableOrdersApprovalSmartWallet && buyerAccessToken) return buyerAccessToken;
                                             var smartInstrument = getInstrument(smartWallet, fundingSource, instrumentID);
                                             if (!smartInstrument) throw new Error("Instrument not found");
                                             if (!smartInstrument.accessToken) throw new Error("Instrument access token not found");
@@ -14231,13 +14307,15 @@ window.spb = function(modules) {
                             });
                         }));
                     }
-                }, {
+                };
+                if (fundingSource === sdk_constants_src.FUNDING.PAYPAL || fundingSource === sdk_constants_src.FUNDING.CREDIT) return props.smartWalletOrderID ? [ CHOOSE_FUNDING_SHIPPING ] : [ CHOOSE_FUNDING_SHIPPING, {
                     label: content.payWithDifferentAccount,
                     popup: wallet_capture_POPUP_OPTIONS,
                     onSelect: function(_ref11) {
                         var _getLogger$info$track2;
                         var win = _ref11.win;
                         Object(lib.getLogger)().info("click_choose_account").track((_getLogger$info$track2 = {}, 
+                        _getLogger$info$track2[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
                         _getLogger$info$track2[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.CLICK_CHOOSE_ACCOUNT, 
                         _getLogger$info$track2[sdk_constants_src.FPTI_KEY.OPTION_SELECTED] = constants.FPTI_MENU_OPTION.CHOOSE_ACCOUNT, 
                         _getLogger$info$track2)).flush();
@@ -15623,7 +15701,8 @@ window.spb = function(modules) {
             var error = _ref.error, _ref$message = _ref.message, message = void 0 === _ref$message ? error : _ref$message, orderID = _ref.orderID, _ref$loggerPayload = _ref.loggerPayload, loggerPayload = void 0 === _ref$loggerPayload ? {} : _ref$loggerPayload, _ref$throwError = _ref.throwError;
             var shouldThrowError = (void 0 === _ref$throwError || _ref$throwError) && _ref.featureFlags.shouldThrowIntegrationError;
             Object(lib.getLogger)().warn(error, loggerPayload).track((_getLogger$warn$track = {}, 
-            _getLogger$warn$track[sdk_constants_src.FPTI_KEY.TRANSITION] = "process_order_validate", 
+            _getLogger$warn$track[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+            _getLogger$warn$track[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.ORDER_VALIDATE, 
             _getLogger$warn$track[sdk_constants_src.FPTI_KEY.CONTEXT_TYPE] = constants.FPTI_CONTEXT_TYPE.ORDER_ID, 
             _getLogger$warn$track[sdk_constants_src.FPTI_KEY.TOKEN] = orderID, _getLogger$warn$track[sdk_constants_src.FPTI_KEY.CONTEXT_ID] = orderID, 
             _getLogger$warn$track[constants.FPTI_CUSTOM_KEY.INTEGRATION_ISSUE] = error, _getLogger$warn$track[constants.FPTI_CUSTOM_KEY.INTEGRATION_WHITELIST] = shouldThrowError ? "false" : "true", 
@@ -15711,14 +15790,16 @@ window.spb = function(modules) {
                     _ref5[sdk_constants_src.FPTI_KEY.CONTEXT_TYPE] = constants.FPTI_CONTEXT_TYPE.BUTTON_SESSION_ID, 
                     _ref5[sdk_constants_src.FPTI_KEY.CONTEXT_ID] = buttonSessionID, _ref5[sdk_constants_src.FPTI_KEY.BUTTON_SESSION_UID] = buttonSessionID, 
                     _ref5[constants.AMPLITUDE_KEY.USER_ID] = buttonSessionID, _ref5[constants.AMPLITUDE_KEY.TIME] = Date.now().toString(), 
-                    _ref5[sdk_constants_src.FPTI_KEY.TOKEN] = null, _ref5;
-                })).track(((_getLogger$addPayload = {})[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.BUTTON_CLICK, 
+                    _ref5;
+                })).track(((_getLogger$addPayload = {})[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                _getLogger$addPayload[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.BUTTON_CLICK, 
                 _getLogger$addPayload[sdk_constants_src.FPTI_KEY.EVENT_NAME] = constants.FPTI_TRANSITION.BUTTON_CLICK, 
                 _getLogger$addPayload[sdk_constants_src.FPTI_KEY.CHOSEN_FI_TYPE] = instrumentType, 
                 _getLogger$addPayload[sdk_constants_src.FPTI_KEY.PAYMENT_FLOW] = name, _getLogger$addPayload[sdk_constants_src.FPTI_KEY.IS_VAULT] = instrumentType ? "1" : "0", 
                 _getLogger$addPayload[constants.FPTI_CUSTOM_KEY.INFO_MSG] = enableNativeCheckout ? "tester" : "", 
                 _getLogger$addPayload));
                 Object(lib.getLogger)().info("cross_site_tracking_" + (Object(src.isCrossSiteTrackingEnabled)("enforce_policy") ? "enabled" : "disabled")).track((_getLogger$info$track = {}, 
+                _getLogger$info$track[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
                 _getLogger$info$track[sdk_constants_src.FPTI_KEY.TRANSITION] = "cross_site_tracking_" + (Object(src.isCrossSiteTrackingEnabled)("enforce_policy") ? "enabled" : "disabled"), 
                 _getLogger$info$track)).flush();
                 var loggingPromise = zalgo_promise_src.ZalgoPromise.try((function() {
@@ -16085,9 +16166,10 @@ window.spb = function(modules) {
             }
         } catch (err) {}
         function setupButton(_ref) {
-            var facilitatorAccessToken = _ref.facilitatorAccessToken, eligibility = _ref.eligibility, fundingEligibility = _ref.fundingEligibility, buyerGeoCountry = _ref.buyerCountry, sdkMeta = _ref.sdkMeta, buyerAccessToken = _ref.buyerAccessToken, wallet = _ref.wallet, cookies = _ref.cookies, serverCSPNonce = _ref.cspNonce, serverMerchantID = _ref.merchantID, firebaseConfig = _ref.firebaseConfig, content = _ref.content, personalization = _ref.personalization, _ref$correlationID = _ref.correlationID, buttonCorrelationID = void 0 === _ref$correlationID ? "" : _ref$correlationID, _ref$brandedDefault = _ref.brandedDefault, brandedDefault = void 0 === _ref$brandedDefault ? null : _ref$brandedDefault, featureFlags = _ref.featureFlags;
+            var facilitatorAccessToken = _ref.facilitatorAccessToken, eligibility = _ref.eligibility, fundingEligibility = _ref.fundingEligibility, buyerGeoCountry = _ref.buyerCountry, sdkMeta = _ref.sdkMeta, buyerAccessToken = _ref.buyerAccessToken, wallet = _ref.wallet, cookies = _ref.cookies, serverCSPNonce = _ref.cspNonce, serverMerchantID = _ref.merchantID, firebaseConfig = _ref.firebaseConfig, content = _ref.content, personalization = _ref.personalization, _ref$correlationID = _ref.correlationID, buttonCorrelationID = void 0 === _ref$correlationID ? "" : _ref$correlationID, _ref$brandedDefault = _ref.brandedDefault, brandedDefault = void 0 === _ref$brandedDefault ? null : _ref$brandedDefault, featureFlags = _ref.featureFlags, smartWalletOrderID = _ref.smartWalletOrderID, enableOrdersApprovalSmartWallet = _ref.enableOrdersApprovalSmartWallet, product = _ref.product;
             if (!window.paypal) throw new Error("PayPal SDK not loaded");
             var clientID = window.xprops.clientID;
+            buyerAccessToken && smartWalletOrderID && Object(lib.setBuyerAccessToken)(buyerAccessToken);
             var serviceData = getServiceData({
                 eligibility: eligibility,
                 facilitatorAccessToken: facilitatorAccessToken,
@@ -16107,7 +16189,9 @@ window.spb = function(modules) {
                 facilitatorAccessToken: facilitatorAccessToken,
                 brandedDefault: brandedDefault,
                 paymentSource: null,
-                featureFlags: featureFlags
+                featureFlags: featureFlags,
+                enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                smartWalletOrderID: smartWalletOrderID
             });
             var env = props.env, sessionID = props.sessionID, partnerAttributionID = props.partnerAttributionID, commit = props.commit, sdkCorrelationID = props.sdkCorrelationID, locale = props.locale, onShippingChange = props.onShippingChange, buttonSessionID = props.buttonSessionID, merchantDomain = props.merchantDomain, onInit = props.onInit, getPrerenderDetails = props.getPrerenderDetails, rememberFunding = props.rememberFunding, getQueriedEligibleFunding = props.getQueriedEligibleFunding, experience = props.experience, style = props.style, fundingSource = props.fundingSource, intent = props.intent, createBillingAgreement = props.createBillingAgreement, createSubscription = props.createSubscription, stickinessID = props.stickinessID;
             var config = getConfig({
@@ -16150,14 +16234,15 @@ window.spb = function(modules) {
                     var _getLogger$info$track;
                     Object(lib.getLogger)().info("smart_buttons_payment_error", {
                         err: Object(src.stringifyError)(err)
-                    }).track(((_getLogger$info$track = {})[sdk_constants_src.FPTI_KEY.ERROR_CODE] = "smart_buttons_payment_error", 
+                    }).track(((_getLogger$info$track = {})[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                    _getLogger$info$track[sdk_constants_src.FPTI_KEY.ERROR_CODE] = "smart_buttons_payment_error", 
                     _getLogger$info$track[sdk_constants_src.FPTI_KEY.ERROR_DESC] = Object(src.stringifyErrorMessage)(err), 
                     _getLogger$info$track));
                     throw err;
                 }));
             }
             menu_menu = null;
-            Object(src.querySelectorAll)("[ " + constants.DATA_ATTRIBUTES.FUNDING_SOURCE + " ]").forEach((function(button) {
+            getButtons().forEach((function(button) {
                 var menuToggle = function(button) {
                     var menu = button.querySelector("[" + constants.DATA_ATTRIBUTES.MENU + "]");
                     if (menu) return menu;
@@ -16197,7 +16282,9 @@ window.spb = function(modules) {
                         facilitatorAccessToken: facilitatorAccessToken,
                         brandedDefault: brandedDefault,
                         paymentSource: paymentFundingSource,
-                        featureFlags: featureFlags
+                        featureFlags: featureFlags,
+                        enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                        smartWalletOrderID: smartWalletOrderID
                     });
                     var payPromise = initiatePayment({
                         payment: payment,
@@ -16245,6 +16332,7 @@ window.spb = function(modules) {
                                         }), name = _getPaymentFlow2.name, setupMenu = _getPaymentFlow2.setupMenu;
                                         if (!setupMenu) throw new Error(name + " does not support menu");
                                         Object(lib.getLogger)().info("menu_click").info("pay_flow_" + name).track((_getLogger$info$info$ = {}, 
+                                        _getLogger$info$info$[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
                                         _getLogger$info$info$[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.MENU_CLICK, 
                                         _getLogger$info$info$[sdk_constants_src.FPTI_KEY.CHOSEN_FUNDING] = fundingSource, 
                                         _getLogger$info$info$[sdk_constants_src.FPTI_KEY.PAYMENT_FLOW] = name, _getLogger$info$info$)).flush();
@@ -16336,7 +16424,8 @@ window.spb = function(modules) {
                                 var _getLogger$info$track2;
                                 Object(lib.getLogger)().info("smart_buttons_payment_error", {
                                     err: Object(src.stringifyError)(err)
-                                }).track(((_getLogger$info$track2 = {})[sdk_constants_src.FPTI_KEY.ERROR_CODE] = "smart_buttons_payment_error", 
+                                }).track(((_getLogger$info$track2 = {})[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                                _getLogger$info$track2[sdk_constants_src.FPTI_KEY.ERROR_CODE] = "smart_buttons_payment_error", 
                                 _getLogger$info$track2[sdk_constants_src.FPTI_KEY.ERROR_DESC] = Object(src.stringifyErrorMessage)(err), 
                                 _getLogger$info$track2));
                                 throw err;
@@ -16362,7 +16451,9 @@ window.spb = function(modules) {
                             facilitatorAccessToken: facilitatorAccessToken,
                             brandedDefault: brandedDefault,
                             paymentSource: paymentFundingSource,
-                            featureFlags: featureFlags
+                            featureFlags: featureFlags,
+                            enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                            smartWalletOrderID: smartWalletOrderID
                         });
                         var payPromise = initiatePayment({
                             payment: {
@@ -16395,7 +16486,7 @@ window.spb = function(modules) {
                 fundingEligibility: fundingEligibility
             });
             var setupButtonLogsTask = function(_ref) {
-                var env = _ref.env, sessionID = _ref.sessionID, buttonSessionID = _ref.buttonSessionID, clientID = _ref.clientID, partnerAttributionID = _ref.partnerAttributionID, commit = _ref.commit, sdkCorrelationID = _ref.sdkCorrelationID, buttonCorrelationID = _ref.buttonCorrelationID, locale = _ref.locale, merchantID = _ref.merchantID, merchantDomain = _ref.merchantDomain, sdkVersion = _ref.sdkVersion, style = _ref.style, fundingSource = _ref.fundingSource, getQueriedEligibleFunding = _ref.getQueriedEligibleFunding, stickinessID = _ref.stickinessID, buyerCountry = _ref.buyerCountry, onShippingChange = _ref.onShippingChange, experience = _ref.experience;
+                var env = _ref.env, sessionID = _ref.sessionID, buttonSessionID = _ref.buttonSessionID, clientID = _ref.clientID, partnerAttributionID = _ref.partnerAttributionID, commit = _ref.commit, sdkCorrelationID = _ref.sdkCorrelationID, buttonCorrelationID = _ref.buttonCorrelationID, locale = _ref.locale, merchantID = _ref.merchantID, merchantDomain = _ref.merchantDomain, sdkVersion = _ref.sdkVersion, style = _ref.style, fundingSource = _ref.fundingSource, getQueriedEligibleFunding = _ref.getQueriedEligibleFunding, stickinessID = _ref.stickinessID, buyerCountry = _ref.buyerCountry, onShippingChange = _ref.onShippingChange, experience = _ref.experience, wallet = _ref.wallet, smartWalletOrderID = _ref.smartWalletOrderID, product = _ref.product;
                 var logger = Object(lib.getLogger)();
                 Object(lib.setupLogger)({
                     env: env,
@@ -16405,7 +16496,9 @@ window.spb = function(modules) {
                     locale: locale,
                     sdkVersion: sdkVersion,
                     buyerCountry: buyerCountry,
-                    fundingSource: fundingSource
+                    fundingSource: fundingSource,
+                    smartWalletOrderID: smartWalletOrderID,
+                    product: product
                 });
                 logger.addPayloadBuilder((function() {
                     var _ref2;
@@ -16419,7 +16512,7 @@ window.spb = function(modules) {
                     var _ref3;
                     return (_ref3 = {})[sdk_constants_src.FPTI_KEY.CONTEXT_TYPE] = constants.FPTI_CONTEXT_TYPE.BUTTON_SESSION_ID, 
                     _ref3[sdk_constants_src.FPTI_KEY.CONTEXT_ID] = buttonSessionID, _ref3[sdk_constants_src.FPTI_KEY.BUTTON_SESSION_UID] = buttonSessionID, 
-                    _ref3[sdk_constants_src.FPTI_KEY.BUTTON_VERSION] = "5.0.120", _ref3[constants.FPTI_BUTTON_KEY.BUTTON_CORRELATION_ID] = buttonCorrelationID, 
+                    _ref3[sdk_constants_src.FPTI_KEY.BUTTON_VERSION] = "5.0.121", _ref3[constants.FPTI_BUTTON_KEY.BUTTON_CORRELATION_ID] = buttonCorrelationID, 
                     _ref3[sdk_constants_src.FPTI_KEY.STICKINESS_ID] = Object(lib.isAndroidChrome)() ? stickinessID : null, 
                     _ref3[sdk_constants_src.FPTI_KEY.PARTNER_ATTRIBUTION_ID] = partnerAttributionID, 
                     _ref3[sdk_constants_src.FPTI_KEY.USER_ACTION] = commit ? sdk_constants_src.FPTI_USER_ACTION.COMMIT : sdk_constants_src.FPTI_USER_ACTION.CONTINUE, 
@@ -16432,13 +16525,13 @@ window.spb = function(modules) {
                     pageRenderTime: Object(src.getPageRenderTime)(),
                     queriedEligibleFunding: getQueriedEligibleFunding()
                 }).then((function(_ref4) {
-                    var _logger$track2;
+                    var _tracking;
                     var pageRenderTime = _ref4.pageRenderTime, queriedEligibleFunding = _ref4.queriedEligibleFunding;
                     var fundingSources = Object(src.querySelectorAll)("[" + constants.DATA_ATTRIBUTES.FUNDING_SOURCE + "]").map((function(el) {
                         return el.getAttribute(constants.DATA_ATTRIBUTES.FUNDING_SOURCE);
                     })).filter(Boolean);
-                    var walletInstruments = Object(src.querySelectorAll)("[" + constants.DATA_ATTRIBUTES.INSTRUMENT_TYPE + "]").map((function(el) {
-                        return el.getAttribute(constants.DATA_ATTRIBUTES.INSTRUMENT_TYPE);
+                    var walletInstruments = Object(src.querySelectorAll)("[" + constants.DATA_ATTRIBUTES.INSTRUMENT_TYPE + "]").flatMap((function(el) {
+                        return [ el.getAttribute(constants.DATA_ATTRIBUTES.INSTRUMENT_TYPE), el.getAttribute(constants.DATA_ATTRIBUTES.SECONDARY_INSTRUMENT_TYPE) ];
                     })).filter(Boolean);
                     var payNow = Object(src.querySelectorAll)("[" + constants.DATA_ATTRIBUTES.FUNDING_SOURCE + "]").map((function(el) {
                         return el.getAttribute(constants.DATA_ATTRIBUTES.PAY_NOW);
@@ -16474,21 +16567,28 @@ window.spb = function(modules) {
                         logger.info("button_render_CPL_instrumentation_log_error");
                     } else logger.info("button_render_CPL_instrumentation_not_executed");
                     var startTime;
-                    logger.track(((_logger$track2 = {})[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.BUTTON_LOAD, 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.EVENT_NAME] = constants.FPTI_TRANSITION.BUTTON_LOAD, 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.FUNDING_LIST] = fundingSources.join(":"), 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.FI_LIST] = walletInstruments.join(":"), 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.SELECTED_FI] = fundingSource, _logger$track2[sdk_constants_src.FPTI_KEY.FUNDING_COUNT] = fundingSources.length.toString(), 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.PAGE_LOAD_TIME] = pageRenderTime ? pageRenderTime.toString() : "", 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.POTENTIAL_PAYMENT_METHODS] = queriedEligibleFunding.join(":"), 
-                    _logger$track2[sdk_constants_src.FPTI_KEY.PAY_NOW] = payNow.toString(), _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_LAYOUT] = layout, 
-                    _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_COLOR] = color, _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_SIZE] = "responsive", 
-                    _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_SHAPE] = shape, _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_LABEL] = label, 
-                    _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_WIDTH] = window.innerWidth, _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_TYPE] = constants.FPTI_BUTTON_TYPE.IFRAME, 
-                    _logger$track2[constants.FPTI_BUTTON_KEY.BUTTON_TAGLINE_ENABLED] = tagline ? "1" : "0", 
-                    _logger$track2[constants.FPTI_CUSTOM_KEY.SHIPPING_CALLBACK_PASSED] = onShippingChange ? "1" : "0", 
-                    _logger$track2));
+                    var tracking = ((_tracking = {})[sdk_constants_src.FPTI_KEY.STATE] = constants.FPTI_STATE.BUTTON, 
+                    _tracking[sdk_constants_src.FPTI_KEY.TRANSITION] = constants.FPTI_TRANSITION.BUTTON_LOAD, 
+                    _tracking[sdk_constants_src.FPTI_KEY.EVENT_NAME] = constants.FPTI_TRANSITION.BUTTON_LOAD, 
+                    _tracking[sdk_constants_src.FPTI_KEY.FUNDING_LIST] = fundingSources.join(":"), _tracking[sdk_constants_src.FPTI_KEY.FI_LIST] = walletInstruments.join(":"), 
+                    _tracking[sdk_constants_src.FPTI_KEY.SELECTED_FI] = fundingSource, _tracking[sdk_constants_src.FPTI_KEY.FUNDING_COUNT] = fundingSources.length.toString(), 
+                    _tracking[sdk_constants_src.FPTI_KEY.PAGE_LOAD_TIME] = pageRenderTime ? pageRenderTime.toString() : "", 
+                    _tracking[sdk_constants_src.FPTI_KEY.POTENTIAL_PAYMENT_METHODS] = queriedEligibleFunding.join(":"), 
+                    _tracking[sdk_constants_src.FPTI_KEY.PAY_NOW] = payNow.toString(), _tracking[constants.FPTI_BUTTON_KEY.BUTTON_LAYOUT] = layout, 
+                    _tracking[constants.FPTI_BUTTON_KEY.BUTTON_COLOR] = color, _tracking[constants.FPTI_BUTTON_KEY.BUTTON_SIZE] = "responsive", 
+                    _tracking[constants.FPTI_BUTTON_KEY.BUTTON_SHAPE] = shape, _tracking[constants.FPTI_BUTTON_KEY.BUTTON_LABEL] = label, 
+                    _tracking[constants.FPTI_BUTTON_KEY.BUTTON_WIDTH] = window.innerWidth, _tracking[constants.FPTI_BUTTON_KEY.BUTTON_TYPE] = constants.FPTI_BUTTON_TYPE.IFRAME, 
+                    _tracking[constants.FPTI_BUTTON_KEY.BUTTON_TAGLINE_ENABLED] = tagline ? "1" : "0", 
+                    _tracking[constants.FPTI_CUSTOM_KEY.SHIPPING_CALLBACK_PASSED] = onShippingChange ? "1" : "0", 
+                    _tracking);
+                    var fiID = function() {
+                        var _wallet$paypal, _wallet$paypal$instru, _wallet$paypal2, _wallet$paypal2$instr;
+                        var FI_ID;
+                        null != wallet && null != (_wallet$paypal = wallet.paypal) && null != (_wallet$paypal$instru = _wallet$paypal.instruments[0]) && _wallet$paypal$instru.secondaryInstruments && wallet.paypal.instruments[0].instrumentID ? FI_ID = wallet.paypal.instruments[0].instrumentID + "," + wallet.paypal.instruments[0].secondaryInstruments[0].instrumentID : null != wallet && null != (_wallet$paypal2 = wallet.paypal) && null != (_wallet$paypal2$instr = _wallet$paypal2.instruments[0]) && _wallet$paypal2$instr.instrumentID && (FI_ID = "" + wallet.paypal.instruments[0].instrumentID);
+                        return FI_ID;
+                    }();
+                    fiID && (tracking["" + sdk_constants_src.FPTI_KEY.FI_ID] = fiID);
+                    logger.track(tracking);
                     logger.flush();
                 }));
             }({
@@ -16510,7 +16610,11 @@ window.spb = function(modules) {
                 getQueriedEligibleFunding: getQueriedEligibleFunding,
                 buyerCountry: buyerCountry,
                 onShippingChange: onShippingChange,
-                experience: experience
+                experience: experience,
+                wallet: wallet,
+                smartWalletOrderID: smartWalletOrderID,
+                enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                product: product
             });
             var setupPaymentFlowsTask = function(_ref) {
                 var props = _ref.props, config = _ref.config, serviceData = _ref.serviceData, components = _ref.components;
@@ -16863,6 +16967,7 @@ window.spb = function(modules) {
             PAYMENT_METHOD_ID: "data-payment-method-id",
             INSTRUMENT_ID: "data-instrument-id",
             INSTRUMENT_TYPE: "data-instrument-type",
+            SECONDARY_INSTRUMENT_TYPE: "data-secondary-instrument-type",
             MENU: "data-menu",
             NONCE: "data-nonce",
             RENDER_VERSION: "data-render-version",
@@ -16909,7 +17014,8 @@ window.spb = function(modules) {
         var FPTI_STATE = {
             BUTTON: "smart_button",
             WALLET: "smart_wallet",
-            PXP: "PXP_CHECK"
+            PXP: "PXP_CHECK",
+            ELIGIBILITY_CHECK: "eligibility_check"
         };
         var FPTI_TRANSITION = {
             BUTTON_LOAD: "process_button_load",
@@ -16986,7 +17092,8 @@ window.spb = function(modules) {
             QR_PREPARE_PAY: "qr_prepare_pay",
             QR_PROCESS_PAY_WITH: "qr_process_pay_with",
             HONEY_IDENTIFY: "honey_identify",
-            CALL_REST_API: "call_rest_api"
+            CALL_REST_API: "call_rest_api",
+            ORDER_VALIDATE: "process_order_validate"
         };
         var FPTI_MENU_OPTION = {
             CHOOSE_FUNDING: "pay_with_different_payment_method",
@@ -17393,7 +17500,7 @@ window.spb = function(modules) {
             });
         }
         function setupLogger(_ref2) {
-            var env = _ref2.env, sessionID = _ref2.sessionID, clientID = _ref2.clientID, sdkCorrelationID = _ref2.sdkCorrelationID, buyerCountry = _ref2.buyerCountry, locale = _ref2.locale, sdkVersion = _ref2.sdkVersion, fundingSource = _ref2.fundingSource;
+            var env = _ref2.env, sessionID = _ref2.sessionID, clientID = _ref2.clientID, sdkCorrelationID = _ref2.sdkCorrelationID, buyerCountry = _ref2.buyerCountry, locale = _ref2.locale, sdkVersion = _ref2.sdkVersion, fundingSource = _ref2.fundingSource, smartWalletOrderID = _ref2.smartWalletOrderID, product = _ref2.product;
             var logger = getLogger();
             logger.addPayloadBuilder((function() {
                 return {
@@ -17405,24 +17512,27 @@ window.spb = function(modules) {
                 };
             }));
             logger.addTrackingBuilder((function() {
-                var _ref3;
+                var _tracking;
                 var lang = locale.lang, country = locale.country;
-                return (_ref3 = {})[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.FEED] = _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_FEED.PAYMENTS_SDK, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.DATA_SOURCE] = _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_DATA_SOURCE.PAYMENTS_SDK, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CLIENT_ID] = clientID, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SESSION_UID] = sessionID, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.REFERER] = window.location.host, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.BUYER_COUNTRY] = buyerCountry, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.LOCALE] = lang + "_" + country, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.INTEGRATION_IDENTIFIER] = clientID, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SDK_ENVIRONMENT] = Object(_krakenjs_belter_src__WEBPACK_IMPORTED_MODULE_1__.isIos)() ? _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.MOBILE_ENV.IOS : Object(_krakenjs_belter_src__WEBPACK_IMPORTED_MODULE_1__.isAndroid)() ? _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.MOBILE_ENV.ANDROID : null, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SDK_NAME] = _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_SDK_NAME.PAYMENTS_SDK, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SDK_VERSION] = sdkVersion, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.USER_AGENT] = window.navigator && window.navigator.userAgent, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CONTEXT_CORRID] = sdkCorrelationID, 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.TIMESTAMP] = Date.now().toString(), 
-                _ref3[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CHOSEN_FUNDING] = fundingSource, 
-                _ref3;
+                var tracking = ((_tracking = {})[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.FEED] = _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_FEED.PAYMENTS_SDK, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.DATA_SOURCE] = _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_DATA_SOURCE.PAYMENTS_SDK, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CLIENT_ID] = clientID, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SESSION_UID] = sessionID, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.REFERER] = window.location.host, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.BUYER_COUNTRY] = buyerCountry, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.LOCALE] = lang + "_" + country, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.INTEGRATION_IDENTIFIER] = clientID, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SDK_ENVIRONMENT] = Object(_krakenjs_belter_src__WEBPACK_IMPORTED_MODULE_1__.isIos)() ? _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.MOBILE_ENV.IOS : Object(_krakenjs_belter_src__WEBPACK_IMPORTED_MODULE_1__.isAndroid)() ? _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.MOBILE_ENV.ANDROID : null, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SDK_NAME] = _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_SDK_NAME.PAYMENTS_SDK, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.SDK_VERSION] = sdkVersion, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.USER_AGENT] = window.navigator && window.navigator.userAgent, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CONTEXT_CORRID] = sdkCorrelationID, 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.TIMESTAMP] = Date.now().toString(), 
+                _tracking[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CHOSEN_FUNDING] = fundingSource, 
+                _tracking);
+                product && (tracking["" + _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.PRODUCT] = product);
+                smartWalletOrderID && (tracking["" + _paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.TOKEN] = smartWalletOrderID);
+                return tracking;
             }));
             _krakenjs_zalgo_promise_src__WEBPACK_IMPORTED_MODULE_2__.ZalgoPromise.onPossiblyUnhandledException((function(err) {
                 var _logger$track;
@@ -17598,7 +17708,7 @@ window.spb = function(modules) {
         }
         function getNavigationTimeOrigin() {
             if (window.performance) {
-                var hrSyncPoint = performance.now();
+                var hrSyncPoint = window.performance.now();
                 var unixSyncPoint = (new Date).getTime();
                 return window.performance.timeOrigin || window.performance.timing.navigationStart || unixSyncPoint - hrSyncPoint;
             }
@@ -17807,7 +17917,7 @@ window.spb = function(modules) {
         }
         function getCreateOrder(_ref5, _ref6) {
             var createOrder = _ref5.createOrder, intent = _ref5.intent, currency = _ref5.currency, merchantID = _ref5.merchantID, partnerAttributionID = _ref5.partnerAttributionID;
-            var facilitatorAccessToken = _ref6.facilitatorAccessToken, createBillingAgreement = _ref6.createBillingAgreement, createSubscription = _ref6.createSubscription;
+            var facilitatorAccessToken = _ref6.facilitatorAccessToken, createBillingAgreement = _ref6.createBillingAgreement, createSubscription = _ref6.createSubscription, enableOrdersApprovalSmartWallet = _ref6.enableOrdersApprovalSmartWallet, smartWalletOrderID = _ref6.smartWalletOrderID;
             var data = buildXCreateOrderData({
                 paymentSource: _ref5.paymentSource
             });
@@ -17821,6 +17931,7 @@ window.spb = function(modules) {
             return Object(_krakenjs_belter_src__WEBPACK_IMPORTED_MODULE_2__.memoize)((function() {
                 var queryOrderID = Object(_krakenjs_belter_src__WEBPACK_IMPORTED_MODULE_2__.getQueryParam)("orderID");
                 if (queryOrderID) return _krakenjs_zalgo_promise_src__WEBPACK_IMPORTED_MODULE_1__.ZalgoPromise.resolve(queryOrderID);
+                if (enableOrdersApprovalSmartWallet && smartWalletOrderID) return _krakenjs_zalgo_promise_src__WEBPACK_IMPORTED_MODULE_1__.ZalgoPromise.resolve(smartWalletOrderID);
                 var startTime = Date.now();
                 return _krakenjs_zalgo_promise_src__WEBPACK_IMPORTED_MODULE_1__.ZalgoPromise.try((function() {
                     return createBillingAgreement ? createBillingAgreement().then(_api__WEBPACK_IMPORTED_MODULE_5__.billingTokenToOrderID) : createSubscription ? createSubscription().then(_api__WEBPACK_IMPORTED_MODULE_5__.subscriptionIdToCartId) : createOrder ? createOrder(data, actions) : actions.order.create({
@@ -17855,6 +17966,7 @@ window.spb = function(modules) {
                     _getLogger$addPayload[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.TRANSITION] = _constants__WEBPACK_IMPORTED_MODULE_6__.FPTI_TRANSITION.RECEIVE_ORDER, 
                     _getLogger$addPayload[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.EVENT_NAME] = _constants__WEBPACK_IMPORTED_MODULE_6__.FPTI_TRANSITION.RECEIVE_ORDER, 
                     _getLogger$addPayload[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CONTEXT_TYPE] = _constants__WEBPACK_IMPORTED_MODULE_6__.FPTI_CONTEXT_TYPE.ORDER_ID, 
+                    _getLogger$addPayload[_constants__WEBPACK_IMPORTED_MODULE_6__.FPTI_BUTTON_KEY.BUTTON_WIDTH] = window.innerWidth, 
                     _getLogger$addPayload[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.CONTEXT_ID] = orderID, 
                     _getLogger$addPayload[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.TOKEN] = orderID, 
                     _getLogger$addPayload[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_3__.FPTI_KEY.RESPONSE_DURATION] = duration.toString(), 
@@ -18191,6 +18303,7 @@ window.spb = function(modules) {
                 return createOrder().then((function(orderID) {
                     var _getLogger$info$track;
                     Object(_lib__WEBPACK_IMPORTED_MODULE_5__.getLogger)().info("button_approve").track((_getLogger$info$track = {}, 
+                    _getLogger$info$track[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_2__.FPTI_KEY.STATE] = _constants__WEBPACK_IMPORTED_MODULE_4__.FPTI_STATE.BUTTON, 
                     _getLogger$info$track[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_2__.FPTI_KEY.TRANSITION] = _constants__WEBPACK_IMPORTED_MODULE_4__.FPTI_TRANSITION.CHECKOUT_APPROVE, 
                     _getLogger$info$track[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_2__.FPTI_KEY.CONTEXT_TYPE] = _constants__WEBPACK_IMPORTED_MODULE_4__.FPTI_CONTEXT_TYPE.ORDER_ID, 
                     _getLogger$info$track[_paypal_sdk_constants_src__WEBPACK_IMPORTED_MODULE_2__.FPTI_KEY.TOKEN] = orderID, 
@@ -19281,7 +19394,7 @@ window.spb = function(modules) {
         var _onError__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__("./src/props/onError.js");
         var TYPES = !0;
         function getProps(_ref) {
-            var facilitatorAccessToken = _ref.facilitatorAccessToken, branded = _ref.branded, paymentSource = _ref.paymentSource, featureFlags = _ref.featureFlags;
+            var facilitatorAccessToken = _ref.facilitatorAccessToken, branded = _ref.branded, paymentSource = _ref.paymentSource, featureFlags = _ref.featureFlags, enableOrdersApprovalSmartWallet = _ref.enableOrdersApprovalSmartWallet, smartWalletOrderID = _ref.smartWalletOrderID;
             var xprops = window.xprops;
             var uid = xprops.uid, env = xprops.env, _xprops$vault = xprops.vault, vault = void 0 !== _xprops$vault && _xprops$vault, commit = xprops.commit, locale = xprops.locale, platform = xprops.platform, sessionID = xprops.sessionID, clientID = xprops.clientID, partnerAttributionID = xprops.partnerAttributionID, merchantRequestedPopupsDisabled = xprops.merchantRequestedPopupsDisabled, clientMetadataID = xprops.clientMetadataID, sdkCorrelationID = xprops.sdkCorrelationID, getParentDomain = xprops.getParentDomain, clientAccessToken = xprops.clientAccessToken, getPopupBridge = xprops.getPopupBridge, getPrerenderDetails = xprops.getPrerenderDetails, getPageUrl = xprops.getPageUrl, enableThreeDomainSecure = xprops.enableThreeDomainSecure, enableVaultInstallments = xprops.enableVaultInstallments, _xprops$enableNativeC = xprops.enableNativeCheckout, enableNativeCheckout = void 0 !== _xprops$enableNativeC && _xprops$enableNativeC, _xprops$experience = xprops.experience, experience = void 0 === _xprops$experience ? "" : _xprops$experience, rememberFunding = xprops.remember, stageHost = xprops.stageHost, apiStageHost = xprops.apiStageHost, getParent = xprops.getParent, fundingSource = xprops.fundingSource, currency = xprops.currency, connect = xprops.connect, intent = xprops.intent, merchantID = xprops.merchantID, amount = xprops.amount, userIDToken = xprops.userIDToken, enableFunding = xprops.enableFunding, disableFunding = xprops.disableFunding, disableCard = xprops.disableCard, disableAutocomplete = xprops.disableAutocomplete, wallet = xprops.wallet, _xprops$paymentMethod = xprops.paymentMethodToken, paymentMethodToken = void 0 === _xprops$paymentMethod ? xprops.paymentMethodNonce : _xprops$paymentMethod, _xprops$getQueriedEli = xprops.getQueriedEligibleFunding, getQueriedEligibleFunding = void 0 === _xprops$getQueriedEli ? function() {
                 return _krakenjs_zalgo_promise_src__WEBPACK_IMPORTED_MODULE_2__.ZalgoPromise.resolve([]);
@@ -19319,7 +19432,9 @@ window.spb = function(modules) {
             }, {
                 facilitatorAccessToken: facilitatorAccessToken,
                 createBillingAgreement: createBillingAgreement,
-                createSubscription: createSubscription
+                createSubscription: createSubscription,
+                enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                smartWalletOrderID: smartWalletOrderID
             });
             var onError = Object(_onError__WEBPACK_IMPORTED_MODULE_16__.getOnError)({
                 onError: xprops.onError
@@ -19434,7 +19549,9 @@ window.spb = function(modules) {
                 userExperienceFlow: userExperienceFlow,
                 allowBillingPayments: allowBillingPayments,
                 paymentRequest: paymentRequest,
-                merchantID: merchantID
+                merchantID: merchantID,
+                enableOrdersApprovalSmartWallet: enableOrdersApprovalSmartWallet,
+                smartWalletOrderID: smartWalletOrderID
             };
         }
     },

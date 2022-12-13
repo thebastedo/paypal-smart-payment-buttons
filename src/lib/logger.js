@@ -42,10 +42,12 @@ type LoggerOptions = {|
     locale : LocaleType,
     buyerCountry : $Values<typeof COUNTRY>,
     sdkVersion : string,
-    fundingSource : ?$Values<typeof FUNDING>
+    fundingSource : ?$Values<typeof FUNDING>,
+    smartWalletOrderID? : string,
+    product? : string
 |};
 
-export function setupLogger({ env, sessionID, clientID, sdkCorrelationID, buyerCountry, locale, sdkVersion, fundingSource } : LoggerOptions) {
+export function setupLogger({ env, sessionID, clientID, sdkCorrelationID, buyerCountry, locale, sdkVersion, fundingSource, smartWalletOrderID, product } : LoggerOptions) {
     const logger = getLogger();
 
     logger.addPayloadBuilder(() => {
@@ -61,7 +63,7 @@ export function setupLogger({ env, sessionID, clientID, sdkCorrelationID, buyerC
     logger.addTrackingBuilder(() => {
         const { lang, country } = locale;
 
-        return {
+        const tracking = {
             [FPTI_KEY.FEED]:                   FPTI_FEED.PAYMENTS_SDK,
             [FPTI_KEY.DATA_SOURCE]:            FPTI_DATA_SOURCE.PAYMENTS_SDK,
             [FPTI_KEY.CLIENT_ID]:              clientID,
@@ -78,6 +80,16 @@ export function setupLogger({ env, sessionID, clientID, sdkCorrelationID, buyerC
             [FPTI_KEY.TIMESTAMP]:              Date.now().toString(),
             [FPTI_KEY.CHOSEN_FUNDING]:         fundingSource
         };
+
+        if (product) {
+            tracking[`${FPTI_KEY.PRODUCT}`] = product;
+        }
+
+        if (smartWalletOrderID) {
+            tracking[`${FPTI_KEY.TOKEN}`] = smartWalletOrderID;
+        }
+
+        return tracking;
     });
 
     ZalgoPromise.onPossiblyUnhandledException(err => {

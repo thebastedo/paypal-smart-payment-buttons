@@ -33,6 +33,15 @@ import type { CreateOrder, XCreateOrder, CreateBillingAgreement, XCreateBillingA
 // export something to force webpack to see this as an ES module
 export const TYPES = true;
 
+export type XOnSmartWalletEligibleDataType = {|
+    accessToken : string,
+    eligibilityReason : string,
+    locale : LocaleType,
+    orderID : string
+|};
+
+export type onSmartWalletEligible = (params : XOnSmartWalletEligibleDataType) => ZalgoPromise<{| smartWalletRendered : boolean, buyerIntent : string |}>;
+
 export type PrerenderDetailsType = {|
     win ? : ? ProxyWindow,
     fundingSource : $Values<typeof FUNDING>,
@@ -174,6 +183,7 @@ export type Props = {|
     onShippingAddressChange : ?OnShippingAddressChange,
     onShippingOptionsChange : ?OnShippingOptionsChange,
     onAuth : OnAuth,
+    onSmartWalletEligible? : onSmartWalletEligible,
 
     paymentMethodToken : ?string,
 
@@ -184,19 +194,25 @@ export type Props = {|
     allowBillingPayments : boolean,
 
     paymentRequest: ?PaymentRequest,
-    merchantID : $ReadOnlyArray<string>
+    merchantID : $ReadOnlyArray<string>,
+    enableOrdersApprovalSmartWallet : boolean | void,
+    smartWalletOrderID : string | void
 |};
 
 export function getProps({
     facilitatorAccessToken,
     branded,
     paymentSource,
-    featureFlags
+    featureFlags,
+    enableOrdersApprovalSmartWallet,
+    smartWalletOrderID
 } : {|
     facilitatorAccessToken : string,
     branded : boolean | null,
     paymentSource : $Values<typeof FUNDING> | null,
-    featureFlags: FeatureFlags
+    featureFlags: FeatureFlags,
+    enableOrdersApprovalSmartWallet? : boolean | void,
+    smartWalletOrderID? : string | void
 |}) : Props {
     const xprops : XProps = window.xprops;
 
@@ -263,7 +279,7 @@ export function getProps({
     const createBillingAgreement = getCreateBillingAgreement({ createBillingAgreement: xprops.createBillingAgreement, paymentSource });
     const createSubscription = getCreateSubscription({ createSubscription: xprops.createSubscription, partnerAttributionID, merchantID, clientID, paymentSource }, { facilitatorAccessToken });
 
-    const createOrder = getCreateOrder({ createOrder: xprops.createOrder, currency, intent, merchantID, partnerAttributionID, paymentSource }, { facilitatorAccessToken, createBillingAgreement, createSubscription });
+    const createOrder = getCreateOrder({ createOrder: xprops.createOrder, currency, intent, merchantID, partnerAttributionID, paymentSource }, { facilitatorAccessToken, createBillingAgreement, createSubscription, enableOrdersApprovalSmartWallet, smartWalletOrderID });
 
     const onError = getOnError({ onError: xprops.onError });
     const onApprove = getOnApprove({ onApprove: xprops.onApprove, createBillingAgreement, createSubscription, intent, onError, partnerAttributionID, clientAccessToken, vault, clientID, facilitatorAccessToken, branded, createOrder, paymentSource, featureFlags });
@@ -343,6 +359,9 @@ export function getProps({
         allowBillingPayments,
 
         paymentRequest,
-        merchantID
+        merchantID,
+
+        enableOrdersApprovalSmartWallet,
+        smartWalletOrderID
     };
 }

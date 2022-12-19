@@ -2,17 +2,17 @@
 /** @jsx h */
 
 import { h, render, Fragment } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { useState, useEffect, useRef } from 'preact/hooks';
 
 import { getBody } from '../../lib';
-import { setupExports, formatFieldValue, autoFocusOnFirstInput, filterExtraFields } from '../lib';
+import { setupExports, autoFocusOnFirstInput, filterExtraFields } from '../lib';
 import { CARD_FIELD_TYPE_TO_FRAME_NAME, CARD_FIELD_TYPE } from '../constants';
-import { submitCardFields } from '../interface';
+import { submitCardFields, getCardFieldState } from '../interface';
 import { getCardProps, type CardProps } from '../props';
 import type { SetupCardOptions} from '../types';
 import type {FeatureFlags } from '../../types'
 
-import { CardField, CardNumberField, CardCVVField, CardExpiryField, CardNameField } from './fields';
+import { CardField, CardNumberField, CardCVVField, CardExpiryField, CardNameField, CardPostalCodeField } from './fields';
 
 type PageProps = {|
     cspNonce : string,
@@ -21,13 +21,17 @@ type PageProps = {|
 |};
 
 function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
-    const { facilitatorAccessToken, style, disableAutocomplete, placeholder, type, onChange, export: xport } = props;
+    const { facilitatorAccessToken, style, disableAutocomplete, placeholder, type, onChange, export: xport, minLength, maxLength } = props;
 
     const [ fieldValue, setFieldValue ] = useState();
     const [ fieldValid, setFieldValid ] = useState(false);
+    const [ fieldPotentiallyValid, setFieldPotentiallyValid] = useState(true);
+    const [cardTypes, setCardTypes] = useState([]);
+    const [fieldFocus, setFieldFocus ] = useState(false);
     const [ fieldErrors, setFieldErrors ] = useState([]);
     const [ mainRef, setRef ] = useState();
-    const [ fieldGQLErrors, setFieldGQLErrors ] = useState({ singleField: {}, numberField: [], expiryField: [], cvvField: [] });
+    const [ fieldGQLErrors, setFieldGQLErrors ] = useState({ singleField: {}, numberField: [], expiryField: [], cvvField: [], nameField: [], postalCodeField: [] });
+    const initialRender = useRef(true)
 
     let autocomplete;
     if (disableAutocomplete) {
@@ -41,6 +45,18 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
     const isFieldValid = () => {
         return fieldValid;
     };
+
+    const isFieldPotentiallyValid = () => {
+        return fieldPotentiallyValid
+    }
+
+    const isFieldFocused = () => {
+        return fieldFocus;
+    }
+
+    const getPotentialCardTypes = () => {
+        return cardTypes
+    }
 
     const setGqlErrors = (errorData : {| field : string, errors : [] |}) => {
         const { errors } = errorData;
@@ -63,6 +79,9 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
             case CARD_FIELD_TYPE.NAME:
                 errorObject.nameField = [ ...errors ];
                 break;
+            case CARD_FIELD_TYPE.POSTAL:
+                errorObject.postalCodeField = [ ...errors ];
+                break;
             default:
                 break;
             }
@@ -72,15 +91,28 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
     };
 
     const resetGQLErrors = () => {
-        setFieldGQLErrors({ singleField: {}, numberField: [], expiryField: [], cvvField: [], nameField: [] });
+        setFieldGQLErrors({ singleField: {}, numberField: [], expiryField: [], cvvField: [], nameField: [], postalCodeField: [] });
     };
 
     useEffect(() => {
-        onChange({
-            isValid:  fieldValid,
-            errors:   fieldErrors
-        });
-    }, [ fieldValid, fieldErrors ]);
+        // useEffect is fired on first render as well as when
+        // any value in the depenency array has changed. We
+        // only want to fire off the onChange event if the
+        // validity changes after the first render. So in
+        // order to do that we add this guard to not noop
+        // when the component first renders. We leverage
+        // useRef to store the value of initialRender as
+        // we want that to persist across re-renders.
+        // See: https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
+        if ( initialRender.current ) {
+            initialRender.current = false
+        } else if(typeof onChange === 'function') {
+            onChange({
+                isValid: fieldValid,
+                errors: fieldErrors
+            });
+        }
+    }, [ fieldValid ]);
 
     useEffect(() => {
         autoFocusOnFirstInput(mainRef);
@@ -89,7 +121,10 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
     useEffect(() => {
         setupExports({
             name: CARD_FIELD_TYPE_TO_FRAME_NAME[type],
+            isFieldPotentiallyValid,
+            getPotentialCardTypes,
             isFieldValid,
+            isFieldFocused,
             getFieldValue,
             setGqlErrors,
             resetGQLErrors
@@ -99,46 +134,25 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
             submit: (extraData) => {
                 const extraFields = filterExtraFields(extraData);
                 return submitCardFields({ facilitatorAccessToken, extraFields, featureFlags });
+            },
+            getState: () => {
+                return getCardFieldState()
             }
         });
-    }, [ fieldValid, fieldValue ]);
+    }, [ fieldValid, fieldValue, fieldFocus, fieldPotentiallyValid, cardTypes ]);
 
-    const onFieldChange = ({ value, valid, errors }) => {
-        const newFieldValue = formatFieldValue(value);
-        
-        setFieldValue(newFieldValue);
+    const onFieldChange = ({ value, valid, isFocused, potentiallyValid, errors, potentialCardTypes }) => {
+        setFieldValue(value);
         setFieldErrors([ ...errors ]);
+        setFieldFocus(isFocused)
         setFieldValid(valid);
+        setFieldPotentiallyValid(potentiallyValid);
         resetGQLErrors();
+        setCardTypes(potentialCardTypes);
     };
 
     return (
         <Fragment>
-            <style nonce={ cspNonce }>
-                {`
-                    * {
-                        box-sizing: border-box;
-                    }
-
-                    html, body {
-                        margin: 0;
-                        padding: 0;
-                        height: 100%;
-                    }
-
-                    body {
-                        display: inline-block;
-                        width: 100%;
-                        font-size: 100%;
-                        font-family: monospace;
-                    }
-
-                    *:focus {
-                        outline: none;
-                    }
-                `}
-            </style>
-
             {
                 (type === CARD_FIELD_TYPE.SINGLE)
                     ? <CardField
@@ -203,6 +217,21 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
                             onChange={ onFieldChange }
                             styleObject={ style }
                             placeholder={ placeholder }
+                            autoFocusRef={ (ref) => setRef(ref.current.base) }
+                    /> : null
+            }
+
+            {
+                (type === CARD_FIELD_TYPE.POSTAL)
+                    ? <CardPostalCodeField
+                            ref={ mainRef }
+                            gqlErrors={ fieldGQLErrors.postalCodeField }
+                            cspNonce={ cspNonce }
+                            onChange={ onFieldChange }
+                            styleObject={ style }
+                            placeholder={ placeholder }
+                            minLength={ minLength }
+                            maxLength={ maxLength || 10}
                             autoFocusRef={ (ref) => setRef(ref.current.base) }
                     /> : null
             }

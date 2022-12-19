@@ -1,3 +1,4 @@
+/* eslint-disable flowtype/require-exact-type */
 /* @flow */
 
 import type { FeatureFlags } from "../types"
@@ -8,27 +9,17 @@ export type SetupCardOptions = {|
     featureFlags: FeatureFlags
 |};
 
-export type Card = {|
-    number : string,
-    cvv? : string,
-    expiry? : string,
-    name? : string
-|};
+export type Card = {
+    number : ?string,
+    cvv? : ?string,
+    expiry? : ?string,
+    name? : ?string,
+    postalCode? : ?string
+};
 
 export type FieldStyle = {|
-    height? : string,
-    width? : string,
-    color? : string,
-    border? : string,
-    borderTop? : string,
-    borderLeft? : string,
-    borderBottom? : string,
-    borderRight? : string,
-    display? : string,
-    backgroundColor? : string,
-    background? : string,
     appearance? : string,
-    boxShadow? : string,
+    color? : string,
     direction? : string,
     font? : string,
     fontFamily? : string,
@@ -47,19 +38,21 @@ export type FieldStyle = {|
     lineHeight? : string,
     opacity? : string,
     outline? : string,
-    margin? : string,
-    marginTop? : string,
-    marginRight? : string,
-    marginBottom? : string,
-    marginLeft? : string,
     padding? : string,
     paddingTop? : string,
     paddingRight? : string,
     paddingBottom? : string,
     paddingLeft? : string,
-    textAlign? : string,
     textShadow? : string,
-    transition? : string
+    transition? : string,
+    MozApperance?: string,
+    MozOsxFontSmoothing?: string,
+    MozTapHighlightColor?: string,
+    MozTransition?: string,
+    WebkitAppearance?: string,
+    WebkitOsxFontSmoothing?: string,
+    WebkitTapHighlightColor?: string,
+    WebkitTransition?: string
 |};
 
 export type CardStyle = {| |};
@@ -68,20 +61,48 @@ export type CardPlaceholder = {|
     number? : string,
     expiry? : string,
     cvv? : string,
-    name? : string
+    name? : string,
+    postal?: string
 |};
+
+export type CardTypeCode = {|
+    name : string,
+    size : number
+ |}
 
 export type CardType = {|
     gaps : $ReadOnlyArray<number>,
     lengths : $ReadOnlyArray<number>,
     patterns : $ReadOnlyArray<number>,
+    matchStrength? : number,
     type : string,
     niceType : string,
-    code : {|
-        name : string,
-        size : number
-     |}
+    code : CardTypeCode
 |};
+
+export type ParsedCardType = {|
+    type: string,
+    niceType: string,
+    code : CardTypeCode
+|};
+
+export type CardFieldState = {|
+    isEmpty: boolean,
+    isValid: boolean,
+    isPotentiallyValid: boolean,
+    isFocused: boolean
+|}
+
+export type CardFieldsState = {
+    cards : $ReadOnlyArray<ParsedCardType>,
+    fields: {
+        cardName? : CardFieldState,
+        cardNumber : CardFieldState,
+        cardExpiry : CardFieldState,
+        cardCvv : CardFieldState,
+        cardPostalCode? : CardFieldState
+    }
+};
 
 export type InputEvent = {|
     key : string,
@@ -92,8 +113,7 @@ export type InputEvent = {|
 export type CardNumberChangeEvent = {|
     event : InputEvent,
     cardNumber : string,
-    cardMaskedNumber : string,
-    cardType : CardType
+    cardMaskedNumber : string
 |};
 
 export type CardExpiryChangeEvent = {|
@@ -110,6 +130,11 @@ export type CardCvvChangeEvent = {|
 export type CardNameChangeEvent = {|
     event : InputEvent,
     cardName : string
+|};
+
+export type CardPostalCodeChangeEvent = {|
+    event : InputEvent,
+    cardPostalCode : string
 |};
 
 export type FieldValidity = {|
@@ -129,8 +154,10 @@ export type InputState = {|
     cursorEnd : number,
     keyStrokeCount : number,
     isPotentiallyValid : boolean,
+    isFocused : boolean,
     isValid : boolean,
-    contentPasted? : boolean
+    contentPasted? : boolean,
+    displayCardIcon?: boolean
 |};
 
 export type InputOptions = {|
@@ -141,3 +168,4 @@ export type InputOptions = {|
 export type ExtraFields = {|
     billingAddress? : string
 |};
+/* eslint-enable flowtype/require-exact-type */

@@ -6,29 +6,29 @@ import { useState, useEffect, useRef } from 'preact/hooks';
 import cardValidator from 'card-validator';
 
 import { defaultNavigation, defaultInputState, navigateOnKeyDown, exportMethods } from '../lib';
-import type { CardNameChangeEvent, CardNavigation, FieldValidity, InputState, InputEvent } from '../types';
+import type { CardPostalCodeChangeEvent, CardNavigation, FieldValidity, InputState, InputEvent } from '../types';
 
 import { AriaMessage } from './AriaMessage'
 
-type CardNameProps = {|
+type CardPostalCodeProps = {|
     name : string,
     type : string,
     state? : InputState,
     placeholder : string,
     style : Object,
-    maxLength : string,
+    maxLength : number,
     navigation : CardNavigation,
-    onChange : (nameEvent : CardNameChangeEvent) => void,
-    onFocus : (event : InputEvent) => void,
-    onBlur : (event : InputEvent) => void,
+    onChange : (expiryEvent : CardPostalCodeChangeEvent) => void,
+    onFocus? : (event : InputEvent) => void,
+    onBlur? : (event : InputEvent) => void,
     allowNavigation : boolean,
-    onValidityChange? : (numberValidity : FieldValidity) => void
+    onValidityChange? : (numberValidity : FieldValidity) => void,
+    minLength: number
 |};
 
-
-export function CardName(
+export function CardPostalCode(
     {
-        name = 'name',
+        name = 'postal',
         navigation = defaultNavigation,
         allowNavigation = false,
         state,
@@ -39,22 +39,23 @@ export function CardName(
         onChange,
         onFocus,
         onBlur,
-        onValidityChange
-    } : CardNameProps
+        onValidityChange,
+        minLength
+    } : CardPostalCodeProps
 ) : mixed {
     const [ attributes, setAttributes ] : [ Object, (Object) => Object ] = useState({ placeholder });
     const [ inputState, setInputState ] : [ InputState, (InputState | InputState => InputState) => InputState ] = useState({ ...defaultInputState, ...state });
     const { inputValue, keyStrokeCount, isValid, isPotentiallyValid } = inputState;
 
-    const nameRef = useRef()
+    const postalCodeRef = useRef();
     const ariaMessageRef = useRef()
 
     useEffect(() => {
-        exportMethods(nameRef, setAttributes, setInputState, ariaMessageRef);
+        exportMethods(postalCodeRef, setAttributes, setInputState, ariaMessageRef);
     }, []);
 
     useEffect(() => {
-        const validity = cardValidator.cardholderName(inputValue);
+        const validity = cardValidator.postalCode(inputValue, { minLength });
         setInputState(newState => ({ ...newState, ...validity }));
     }, [ inputValue ]);
 
@@ -67,17 +68,17 @@ export function CardName(
         }
     }, [ isValid, isPotentiallyValid ]);
 
-    const setNameValue : (InputEvent) => void = (event : InputEvent) : void => {
-        const { value  } = event.target;
+    const setPostalCodeValue : (InputEvent) => void = (event : InputEvent) : void => {
+        const { value } = event.target;
 
         setInputState({
             ...inputState,
             inputValue:       value,
-            maskedInputValue: value,
             keyStrokeCount:   keyStrokeCount + 1
         });
 
-        onChange({ event, cardName: value  });
+        onChange({ event, cardPostalCode: value });
+
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {
@@ -101,25 +102,26 @@ export function CardName(
     return (
         <Fragment>
             <input
-                aria-describedby={'card-name-field-description'}
+                aria-describedby={'card-postalCode-field-description'}
                 name={ name }
-                inputmode='text'
-                ref={ nameRef }
+                inputmode='numeric'
+                ref={ postalCodeRef }
                 type={ type }
-                className="card-field-name"
+                className='card-field-postal-code'
                 value={ inputValue }
                 style={ style }
                 maxLength={ maxLength }
                 onKeyDown={ onKeyDownEvent }
-                onInput={ setNameValue }
+                onInput={ setPostalCodeValue }
                 onFocus={ onFocusEvent }
                 onBlur={ onBlurEvent }
+                minLength={ minLength }
                 { ...attributes }
-                />
+            />
             <AriaMessage
-                ariaMessageId={'card-name-field-description'}
+                ariaMessageId={'card-postalCode-field-description'}
                 ariaMessageRef={ariaMessageRef}
             />
         </Fragment>
-    );
+    )
 }

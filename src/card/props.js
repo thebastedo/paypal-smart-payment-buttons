@@ -1,13 +1,13 @@
 /* @flow */
 
-import type { ZalgoPromise } from '@krakenjs/zalgo-promise/src';
+import { ZalgoPromise } from '@krakenjs/zalgo-promise/src';
 import { FUNDING, CARD, type FundingEligibilityType } from '@paypal/sdk-constants/src';
 import { EXPERIENCE } from '@paypal/checkout-components/src/constants/button';
 
 import type { ProxyWindow, FeatureFlags } from '../types';
 import { getProps, type XProps, type Props } from '../props/props';
 
-import type { CardStyle, CardPlaceholder } from './types';
+import type { CardStyle, CardPlaceholder, CardFieldsState } from './types';
 import { CARD_FIELD_TYPE, CARD_ERRORS } from './constants';
 
 // export something to force webpack to see this as an ES module
@@ -20,7 +20,8 @@ export type PrerenderDetailsType = {|
 |};
 
 export type CardExport = ({|
-    submit : () => ZalgoPromise<void>
+    submit : () => ZalgoPromise<void>,
+    getState : () => CardFieldsState
 |}) => ZalgoPromise<void>;
 
 export type OnChange = ({|
@@ -34,6 +35,8 @@ export type CardXProps = {|
     type : $Values<typeof CARD_FIELD_TYPE>,
     style : CardStyle,
     placeholder : CardPlaceholder,
+    minLength? : number,
+    maxLength? : number,
     cardSessionID : string,
     fundingEligibility : FundingEligibilityType,
     onChange : OnChange,
@@ -51,6 +54,8 @@ export type CardProps = {|
     branded : boolean,
     style : CardStyle,
     placeholder : CardPlaceholder,
+    minLength? : number,
+    maxLength? : number,
     cardSessionID : string,
     inlinexo : boolean,
     fundingEligibility : FundingEligibilityType,
@@ -73,6 +78,8 @@ export function getCardProps({ facilitatorAccessToken, featureFlags } : GetCardP
         cardSessionID,
         style,
         placeholder,
+        minLength,
+        maxLength,
         fundingEligibility,
         onChange,
         branded = fundingEligibility?.card?.branded ?? true,
@@ -89,6 +96,8 @@ export function getCardProps({ facilitatorAccessToken, featureFlags } : GetCardP
         branded,
         style,
         placeholder,
+        minLength,
+        maxLength,
         cardSessionID,
         fundingEligibility,
         onChange,

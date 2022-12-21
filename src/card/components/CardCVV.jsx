@@ -73,9 +73,16 @@ export function CardCVV(
     }, []);
 
     useEffect(() => {
+        onChange({cardCvv: inputState.inputValue});
+    }, [ inputState ]);
+
+    useEffect(() => {
         const validity = cardValidator.cvv(inputValue, cardType?.code?.size);
+        if (touched) {
+            validity.isPotentiallyValid = false;
+        }
         setInputState(newState => ({ ...newState, ...validity }));
-    }, [ inputValue ]);
+    }, [ cardType ]);
 
     useEffect(() => {
         const validity = cardValidator.cvv(inputValue, cardType?.code?.size);
@@ -97,15 +104,16 @@ export function CardCVV(
     const setCvvValue : (InputEvent) => void = (event : InputEvent) : void => {
         const { value : rawValue } = event.target;
         const value = removeNonDigits(rawValue);
+        const validity = cardValidator.cvv(value, cardType?.code?.size);
 
         setInputState({
             ...inputState,
+            ...validity,
             inputValue:       value,
             maskedInputValue: value,
             keyStrokeCount:   keyStrokeCount + 1
         });
 
-        onChange({ event, cardCvv: value  });
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {

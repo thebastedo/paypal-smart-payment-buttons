@@ -15,9 +15,10 @@ import { getLogger } from "../lib";
 import type { FeatureFlags } from "../types";
 
 import { getCardProps } from "./props";
-import type { Card, ExtraFields, CardFieldsState } from "./types";
+import type { Card, ExtraFields, CardFieldsState, FieldsState } from "./types";
 import { type CardExports, type ExportsOptions } from "./lib";
-import { parsedCardType } from "./lib/card-utils";
+import { parsedCardType, kebabToCamelCase } from "./lib/card-utils";
+import { CARD_ERRORS } from "./constants";
 
 function getExportsByFrameName<T>(
   name: $Values<typeof FRAME_NAME>
@@ -70,19 +71,13 @@ function getCardFrames(): {
   };
 }
 
-function isEmpty(value: string): boolean {
+export function isEmpty(value: string): boolean {
   if (value.length === 0) {
     return true;
   }
   return false;
 }
 
-function formatCardFrameFieldName(fieldName: string): string {
-  const res = fieldName.split("-");
-  res.pop();
-  res[1] = res[1]?.replace(/^\w/, c => c.toUpperCase());
-  return res.join("");
-}
 export function getCardFieldState(): CardFieldsState {
   const {
     cardNameFrame,
@@ -98,7 +93,7 @@ export function getCardFieldState(): CardFieldsState {
   const cardFrameFields = [cardNameFrame, cardPostalFrame];
   cardFrameFields.forEach(cardFrame => {
     if (cardFrame) {
-      optionalFields[formatCardFrameFieldName(cardFrame.name)] = {
+      optionalFields[kebabToCamelCase(cardFrame.name)] = {
         isEmpty: isEmpty(cardFrame?.getFieldValue()),
         isValid: cardFrame?.isFieldValid(),
         isPotentiallyValid: cardFrame.isFieldPotentiallyValid(),
@@ -111,19 +106,19 @@ export function getCardFieldState(): CardFieldsState {
     cards: parsedCardType(cardNumberFrame.getPotentialCardTypes()),
     fields: {
       ...optionalFields,
-      cardNumber: {
+      cardNumberField: {
         isEmpty: isEmpty(cardNumberFrame.getFieldValue()),
         isValid: cardNumberFrame.isFieldValid(),
         isPotentiallyValid: cardNumberFrame.isFieldPotentiallyValid(),
         isFocused: cardNumberFrame.isFieldFocused()
       },
-      cardExpiry: {
+      cardExpiryField: {
         isEmpty: isEmpty(cardExpiryFrame.getFieldValue()),
         isValid: cardExpiryFrame.isFieldValid(),
         isPotentiallyValid: cardExpiryFrame.isFieldPotentiallyValid(),
         isFocused: cardExpiryFrame.isFieldFocused()
       },
-      cardCvv: {
+      cardCvvField: {
         isEmpty: isEmpty(cardCVVFrame.getFieldValue()),
         isValid: cardCVVFrame.isFieldValid(),
         isPotentiallyValid: cardCVVFrame.isFieldPotentiallyValid(),
@@ -271,7 +266,7 @@ type CardValues = {|
 |};
 
 // Reformat MM/YYYY to YYYY-MM
-function reformatExpiry(expiry: ?string): ?string {
+export function reformatExpiry(expiry: ?string): ?string {
   if (typeof expiry === "string") {
     const [month, year] = expiry.split("/");
     return `${year}-${month}`;
@@ -351,5 +346,33 @@ export function submitCardFields({
         });
     }
   });
+}
+
+export const getFieldErrors = (fields : FieldsState ) : [$Values<typeof CARD_ERRORS>] | [] => {
+  const errors = [];
+  Object.keys(fields).forEach(field => {
+    if(fields[field] && !fields[field].isValid){
+      switch(field) {
+        case kebabToCamelCase(FRAME_NAME.CARD_NAME_FIELD):
+          errors.push(CARD_ERRORS.INVALID_NAME)
+          break;
+        case kebabToCamelCase(FRAME_NAME.CARD_NUMBER_FIELD):
+          errors.push(CARD_ERRORS.INVALID_NUMBER)
+          break;
+        case kebabToCamelCase(FRAME_NAME.CARD_EXPIRY_FIELD):
+          errors.push(CARD_ERRORS.INVALID_EXPIRY)
+          break;
+        case kebabToCamelCase(FRAME_NAME.CARD_CVV_FIELD):
+          errors.push(CARD_ERRORS.INVALID_CVV)
+          break;
+        case kebabToCamelCase(FRAME_NAME.CARD_POSTAL_FIELD):
+          errors.push(CARD_ERRORS.INVALID_POSTAL)
+          break;
+        default:
+          // noop
+      }
+    }
+  })
+  return errors;
 }
 /* eslint-enable flowtype/require-exact-type */

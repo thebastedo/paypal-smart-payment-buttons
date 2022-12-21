@@ -93,15 +93,17 @@ export type CardFieldState = {|
     isFocused: boolean
 |}
 
+export type FieldsState = {
+    cardNameField? : CardFieldState,
+    cardNumberField : CardFieldState,
+    cardExpiryField : CardFieldState,
+    cardCvvField : CardFieldState,
+    cardPostalCodeField? : CardFieldState
+}
+
 export type CardFieldsState = {
     cards : $ReadOnlyArray<ParsedCardType>,
-    fields: {
-        cardName? : CardFieldState,
-        cardNumber : CardFieldState,
-        cardExpiry : CardFieldState,
-        cardCvv : CardFieldState,
-        cardPostalCode? : CardFieldState
-    }
+    fields: FieldsState
 };
 
 export type InputEvent = {|
@@ -111,29 +113,24 @@ export type InputEvent = {|
 |};
 
 export type CardNumberChangeEvent = {|
-    event : InputEvent,
     cardNumber : string,
-    cardMaskedNumber : string
+    potentialCardTypes : CardType,
 |};
 
 export type CardExpiryChangeEvent = {|
-    event : InputEvent,
     maskedDate : string,
-    date : string
 |};
 
 export type CardCvvChangeEvent = {|
-    event : InputEvent,
     cardCvv : string
 |};
 
 export type CardNameChangeEvent = {|
-    event : InputEvent,
     cardName : string
 |};
 
 export type CardPostalCodeChangeEvent = {|
-    event : InputEvent,
+    event? : InputEvent,
     cardPostalCode : string
 |};
 

@@ -54,9 +54,8 @@ export function CardName(
     }, []);
 
     useEffect(() => {
-        const validity = cardValidator.cardholderName(inputValue);
-        setInputState(newState => ({ ...newState, ...validity }));
-    }, [ inputValue ]);
+        onChange({ cardName: inputState.inputValue});
+    }, [inputState])
 
     useEffect(() => {
         if (typeof onValidityChange === 'function') {
@@ -69,15 +68,16 @@ export function CardName(
 
     const setNameValue : (InputEvent) => void = (event : InputEvent) : void => {
         const { value  } = event.target;
+        const validity = cardValidator.cardholderName(value);
 
         setInputState({
             ...inputState,
+            ...validity,
             inputValue:       value,
             maskedInputValue: value,
             keyStrokeCount:   keyStrokeCount + 1
         });
 
-        onChange({ event, cardName: value  });
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {

@@ -61,7 +61,6 @@ type CardNumberProps = {|
     onBlur? : (event : InputEvent) => void,
     onValidityChange? : (numberValidity : FieldValidity) => void,
     onEligibilityChange? : (isCardEligible : boolean) => void,
-    onPotentialCardTypesChange? : (cardTypes : CardType) => void
 |};
 
 export function CardNumber(
@@ -79,7 +78,6 @@ export function CardNumber(
         onBlur,
         onValidityChange,
         onEligibilityChange,
-        onPotentialCardTypesChange
     } : CardNumberProps
 ) : mixed {
     const [ attributes, setAttributes ] : [ Object, (Object) => Object ] = useState({ placeholder });
@@ -103,19 +101,14 @@ export function CardNumber(
     }, [cardTypes])
 
     useEffect(() => {
-        const validity = cardValidator.number(inputValue);
-        setInputState(newState => ({ ...newState, ...validity }));
-    }, [ inputValue, maskedInputValue ]);
+        onChange({ cardNumber: inputState.inputValue, potentialCardTypes: cardTypes});
+    }, [ inputState ]);
 
     useEffect(() => {
         if (typeof onEligibilityChange === 'function') {
             onEligibilityChange(checkCardEligibility(inputValue, cardType));
         }
         
-        if (typeof onPotentialCardTypesChange === 'function') {
-            onPotentialCardTypesChange(cardTypes);
-        }
-
         if (cardType && cardType.lengths) {
             // get the maximum card length for the given card type
             const cardMaxLength = cardType.lengths.reduce((previousValue, currentValue) => {
@@ -154,8 +147,8 @@ export function CardNumber(
         const { value: rawValue, selectionStart, selectionEnd } = event.target;
         const value = removeNonDigits(rawValue);
         const detectedCardType = detectCardType(value);
+        const validity = cardValidator.number(value);
         const maskedValue = addGapsToCardNumber(value);
-
         let startCursorPosition = selectionStart;
         let endCursorPosition = selectionEnd;
         
@@ -177,6 +170,7 @@ export function CardNumber(
         setCardTypes(detectedCardType);
         setInputState({
             ...inputState,
+            ...validity,
             inputValue:       value,
             maskedInputValue: maskedValue,
             cursorStart:      startCursorPosition,
@@ -185,7 +179,6 @@ export function CardNumber(
             keyStrokeCount:   keyStrokeCount + 1
         });
 
-        onChange({ event, cardNumber: value, cardMaskedNumber: maskedValue });
     };
 
     const onFocusEvent : (InputEvent) => void = (event : InputEvent) : void => {

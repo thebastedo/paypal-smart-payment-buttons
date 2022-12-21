@@ -55,9 +55,8 @@ export function CardPostalCode(
     }, []);
 
     useEffect(() => {
-        const validity = cardValidator.postalCode(inputValue, { minLength });
-        setInputState(newState => ({ ...newState, ...validity }));
-    }, [ inputValue ]);
+        onChange({ cardPostalCode: inputState.inputValue });
+    }, [ inputState ]);
 
     useEffect(() => {
         if (typeof onValidityChange === 'function') {
@@ -70,15 +69,14 @@ export function CardPostalCode(
 
     const setPostalCodeValue : (InputEvent) => void = (event : InputEvent) : void => {
         const { value } = event.target;
+        const validity = cardValidator.postalCode(value, { minLength });
 
         setInputState({
             ...inputState,
+            ...validity,
             inputValue:       value,
             keyStrokeCount:   keyStrokeCount + 1
         });
-
-        onChange({ event, cardPostalCode: value });
-
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {

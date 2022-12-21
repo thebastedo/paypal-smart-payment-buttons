@@ -7,7 +7,7 @@ import { EXPERIENCE } from '@paypal/checkout-components/src/constants/button';
 import type { ProxyWindow, FeatureFlags } from '../types';
 import { getProps, type XProps, type Props } from '../props/props';
 
-import type { CardStyle, CardPlaceholder, CardFieldsState } from './types';
+import type { CardStyle, CardPlaceholder, CardFieldsState, ParsedCardType, FieldsState } from './types';
 import { CARD_FIELD_TYPE, CARD_ERRORS } from './constants';
 
 // export something to force webpack to see this as an ES module
@@ -25,7 +25,10 @@ export type CardExport = ({|
 |}) => ZalgoPromise<void>;
 
 export type OnChange = ({|
+    potentialCardTypes : $ReadOnlyArray<ParsedCardType>,
     isValid : boolean,
+    emittedBy: string,
+    fields: FieldsState,
     errors : [$Values<typeof CARD_ERRORS>] | []
 |}) => ZalgoPromise<void>;
 

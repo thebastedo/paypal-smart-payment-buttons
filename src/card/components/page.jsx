@@ -5,9 +5,9 @@ import { h, render, Fragment } from 'preact';
 import { useState, useEffect, useRef } from 'preact/hooks';
 
 import { getBody } from '../../lib';
-import { setupExports, autoFocusOnFirstInput, filterExtraFields } from '../lib';
+import { setupExports, autoFocusOnFirstInput, filterExtraFields, kebabToCamelCase, parsedCardType} from '../lib';
 import { CARD_FIELD_TYPE_TO_FRAME_NAME, CARD_FIELD_TYPE } from '../constants';
-import { submitCardFields, getCardFieldState } from '../interface';
+import { submitCardFields, getCardFieldState, getFieldErrors, isEmpty } from '../interface';
 import { getCardProps, type CardProps } from '../props';
 import type { SetupCardOptions} from '../types';
 import type {FeatureFlags } from '../../types'
@@ -26,9 +26,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
     const [ fieldValue, setFieldValue ] = useState();
     const [ fieldValid, setFieldValid ] = useState(false);
     const [ fieldPotentiallyValid, setFieldPotentiallyValid] = useState(true);
-    const [cardTypes, setCardTypes] = useState([]);
-    const [fieldFocus, setFieldFocus ] = useState(false);
-    const [ fieldErrors, setFieldErrors ] = useState([]);
+    const [ cardTypes, setCardTypes ] = useState([]);
+    const [ fieldFocus, setFieldFocus ] = useState(false);
     const [ mainRef, setRef ] = useState();
     const [ fieldGQLErrors, setFieldGQLErrors ] = useState({ singleField: {}, numberField: [], expiryField: [], cvvField: [], nameField: [], postalCodeField: [] });
     const initialRender = useRef(true)
@@ -104,15 +103,33 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
         // useRef to store the value of initialRender as
         // we want that to persist across re-renders.
         // See: https://reactjs.org/docs/hooks-faq.html#is-there-something-like-instance-variables
-        if ( initialRender.current ) {
+        if ( initialRender.current && fieldValue === '') {
             initialRender.current = false
-        } else if(typeof onChange === 'function') {
+        } else if( !initialRender.current && typeof onChange === 'function' ) {
+            const { cards, fields } = getCardFieldState()
+            const currentField = kebabToCamelCase(CARD_FIELD_TYPE_TO_FRAME_NAME[type])
+            let potentialCardTypes
+            fields[currentField] = {
+                isEmpty: isEmpty(fieldValue),
+                isFocused: fieldFocus,
+                isFieldPotentiallyValid: fieldPotentiallyValid,
+                isValid: fieldValid
+            }
+            if (currentField === 'cardNumberField') {
+                potentialCardTypes = parsedCardType(cardTypes)
+            } else {
+                potentialCardTypes = cards
+            }
+ 
             onChange({
+                fields,
+                potentialCardTypes,
+                emittedBy: type,
                 isValid: fieldValid,
-                errors: fieldErrors
+                errors: getFieldErrors(fields)
             });
         }
-    }, [ fieldValid ]);
+    }, [ fieldValue ]);
 
     useEffect(() => {
         autoFocusOnFirstInput(mainRef);
@@ -141,9 +158,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
         });
     }, [ fieldValid, fieldValue, fieldFocus, fieldPotentiallyValid, cardTypes ]);
 
-    const onFieldChange = ({ value, valid, isFocused, potentiallyValid, errors, potentialCardTypes }) => {
+    const onFieldChange = ({ value, valid, isFocused, potentiallyValid, potentialCardTypes }) => {
         setFieldValue(value);
-        setFieldErrors([ ...errors ]);
         setFieldFocus(isFocused)
         setFieldValid(valid);
         setFieldPotentiallyValid(potentiallyValid);

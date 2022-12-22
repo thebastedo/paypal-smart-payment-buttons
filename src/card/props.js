@@ -107,7 +107,8 @@ export function getCardProps({ facilitatorAccessToken, featureFlags } : GetCardP
         branded = fundingEligibility?.card?.branded ?? true,
         parent,
         experience,
-        export: xport
+        export: xport,
+        action,
     } = xprops;
 
     const props = getProps({ facilitatorAccessToken, branded, paymentSource: null, featureFlags });
@@ -125,7 +126,8 @@ export function getCardProps({ facilitatorAccessToken, featureFlags } : GetCardP
         inputEvents,
         inlinexo: experience === EXPERIENCE.INLINE,
         export:   parent ? parent.export : xport,
-        facilitatorAccessToken
+        facilitatorAccessToken,
+        action: parent.props.action
     };
 }
 

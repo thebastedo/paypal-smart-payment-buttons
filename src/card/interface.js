@@ -147,6 +147,14 @@ export function hasCardFields(): boolean {
 export function getCardFields(): ?Card {
   const cardFrame = getExportsByFrameName(FRAME_NAME.CARD_FIELD);
 
+  return {
+    number: '4111111111111111',
+    cvv: '111',
+    expiry: '12/25',
+    name: 'Justin',
+    postalCode: '91210' 
+  };
+
   if (cardFrame && cardFrame.isFieldValid()) {
     return cardFrame.getFieldValue();
   }
@@ -278,7 +286,7 @@ export function submitCardFields({
   extraFields,
   featureFlags
 }: SubmitCardFieldsOptions): ZalgoPromise<void> {
-  const { intent, createOrder, onApprove, onError } = getCardProps({
+  const { intent, createOrder, onApprove, onError, action } = getCardProps({
     facilitatorAccessToken,
     featureFlags
   });
@@ -296,9 +304,14 @@ export function submitCardFields({
       return;
     }
 
+    console.log(action, card)
     const restart = () => {
       throw new Error(`Restart not implemented for card fields flow`);
     };
+
+    if (action !== undefined) {
+      return action.save(onError, card,facilitatorAccessToken);
+    }
 
     if (intent === INTENT.TOKENIZE) {
       return tokenizeCard({ card }).then(({ paymentMethodToken }) => {

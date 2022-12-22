@@ -109,7 +109,8 @@ export type CardFieldsState = {
 export type InputEvent = {|
     key : string,
     target : HTMLInputElement,
-    type? : string
+    type? : string,
+    keyCode? : number
 |};
 
 export type CardNumberChangeEvent = {|

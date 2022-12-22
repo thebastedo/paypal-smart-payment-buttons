@@ -23,6 +23,7 @@ type CardCvvProps = {|
     onChange : (cvvEvent : CardCvvChangeEvent) => void,
     onFocus : (event : InputEvent) => void,
     onBlur : (event : InputEvent) => void,
+    onKeyDown? : (keyDown : boolean) => void,
     allowNavigation : boolean,
     onValidityChange? : (numberValidity : FieldValidity) => void
 |};
@@ -41,6 +42,7 @@ export function CardCVV(
         onChange,
         onFocus,
         onBlur,
+        onKeyDown,
         onValidityChange
     } : CardCvvProps
 ) : mixed {
@@ -117,6 +119,14 @@ export function CardCVV(
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {
+        if (typeof onKeyDown === 'function') {
+            if(event.key === "Enter"){
+                onKeyDown(true)
+            } else {
+                onKeyDown(false)
+            }
+        }
+
         if (allowNavigation) {
             navigateOnKeyDown(event, navigation);
         }
@@ -132,8 +142,11 @@ export function CardCVV(
     };
 
     const onBlurEvent : (InputEvent) => void = (event : InputEvent) : void => {
-        if (typeof onBlur === 'function') {
+        if ( typeof onBlur === 'function') {
             onBlur(event);
+        }
+        if ( typeof onKeyDown === 'function') {
+            onKeyDown(false)
         }
     };
 

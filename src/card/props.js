@@ -1,4 +1,5 @@
 /* @flow */
+/* eslint-disable flowtype/require-exact-type */
 
 import { ZalgoPromise } from '@krakenjs/zalgo-promise/src';
 import { FUNDING, CARD, type FundingEligibilityType } from '@paypal/sdk-constants/src';
@@ -24,13 +25,31 @@ export type CardExport = ({|
     getState : () => CardFieldsState
 |}) => ZalgoPromise<void>;
 
-export type OnChange = ({|
+export type InputEventState = {|
     potentialCardTypes : $ReadOnlyArray<ParsedCardType>,
-    isValid : boolean,
     emittedBy: string,
     fields: FieldsState,
-    errors : [$Values<typeof CARD_ERRORS>] | []
-|}) => ZalgoPromise<void>;
+    errors : [$Values<typeof CARD_ERRORS>] | [],
+    isFormValid : boolean,
+|}
+
+export type OnChange = ({|
+    ...InputEventState,
+ |}) => ZalgoPromise<void>;
+
+
+export type OnBlur = (InputEventState) => ZalgoPromise<void>
+
+export type OnFocus = (InputEventState) => ZalgoPromise<void>
+
+export type OnInputSubmitRequest = (InputEventState) => ZalgoPromise<void>
+
+export type InputEvents = {
+    onChange? : OnChange,
+    onFocus? : OnFocus,
+    onBlur? : OnBlur,
+    onInputSubmitRequest? : OnInputSubmitRequest,
+}
 
 export type CardXProps = {|
     ...XProps,
@@ -42,7 +61,7 @@ export type CardXProps = {|
     maxLength? : number,
     cardSessionID : string,
     fundingEligibility : FundingEligibilityType,
-    onChange : OnChange,
+    inputEvents : InputEvents,
     export : CardExport,
     parent? : {|
         props : XProps,
@@ -63,7 +82,7 @@ export type CardProps = {|
     inlinexo : boolean,
     fundingEligibility : FundingEligibilityType,
     export : CardExport,
-    onChange : OnChange,
+    inputEvents : InputEvents,
     facilitatorAccessToken : string,
     disableAutocomplete? : boolean
 |};
@@ -84,7 +103,7 @@ export function getCardProps({ facilitatorAccessToken, featureFlags } : GetCardP
         minLength,
         maxLength,
         fundingEligibility,
-        onChange,
+        inputEvents,
         branded = fundingEligibility?.card?.branded ?? true,
         parent,
         experience,
@@ -103,9 +122,11 @@ export function getCardProps({ facilitatorAccessToken, featureFlags } : GetCardP
         maxLength,
         cardSessionID,
         fundingEligibility,
-        onChange,
+        inputEvents,
         inlinexo: experience === EXPERIENCE.INLINE,
         export:   parent ? parent.export : xport,
         facilitatorAccessToken
     };
 }
+
+/* eslint-enable flowtype/require-exact-type */

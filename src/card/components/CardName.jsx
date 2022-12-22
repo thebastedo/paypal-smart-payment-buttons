@@ -21,6 +21,7 @@ type CardNameProps = {|
     onChange : (nameEvent : CardNameChangeEvent) => void,
     onFocus : (event : InputEvent) => void,
     onBlur : (event : InputEvent) => void,
+    onKeyDown? : (keyDown : boolean) => void,
     allowNavigation : boolean,
     onValidityChange? : (numberValidity : FieldValidity) => void
 |};
@@ -39,6 +40,7 @@ export function CardName(
         onChange,
         onFocus,
         onBlur,
+        onKeyDown,
         onValidityChange
     } : CardNameProps
 ) : mixed {
@@ -81,6 +83,14 @@ export function CardName(
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {
+        if (typeof onKeyDown === 'function') {
+            if(event.key === "Enter"){
+                onKeyDown(true)
+            } else {
+                onKeyDown(false)
+            }
+        }
+
         if (allowNavigation) {
             navigateOnKeyDown(event, navigation);
         }
@@ -95,6 +105,9 @@ export function CardName(
     const onBlurEvent : (InputEvent) => void = (event : InputEvent) : void => {
         if (typeof onBlur === 'function') {
             onBlur(event);
+        }
+        if ( typeof onKeyDown === 'function') {
+            onKeyDown(false)
         }
     };
 

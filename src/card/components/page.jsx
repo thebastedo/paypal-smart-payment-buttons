@@ -21,13 +21,14 @@ type PageProps = {|
 |};
 
 function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
-    const { facilitatorAccessToken, style, disableAutocomplete, placeholder, type, onChange, export: xport, minLength, maxLength } = props;
-
+    const { facilitatorAccessToken, style, disableAutocomplete, placeholder, type, export: xport, inputEvents, minLength, maxLength } = props;
+    const { onChange, onFocus, onBlur, onInputSubmitRequest } = inputEvents || {};
     const [ fieldValue, setFieldValue ] = useState();
     const [ fieldValid, setFieldValid ] = useState(false);
     const [ fieldPotentiallyValid, setFieldPotentiallyValid] = useState(true);
     const [ cardTypes, setCardTypes ] = useState([]);
     const [ fieldFocus, setFieldFocus ] = useState(false);
+    const [ inputSubmit, setInputSubmit ] = useState(false);
     const [ mainRef, setRef ] = useState();
     const [ fieldGQLErrors, setFieldGQLErrors ] = useState({ singleField: {}, numberField: [], expiryField: [], cvvField: [], nameField: [], postalCodeField: [] });
     const initialRender = useRef(true)
@@ -93,6 +94,24 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
         setFieldGQLErrors({ singleField: {}, numberField: [], expiryField: [], cvvField: [], nameField: [], postalCodeField: [] });
     };
 
+    const getStateObject = () => {
+        const { cards, fields } = getCardFieldState()
+        const currentField = kebabToCamelCase(CARD_FIELD_TYPE_TO_FRAME_NAME[type])
+        let potentialCardTypes
+        fields[currentField] = {
+            isEmpty: isEmpty(fieldValue),
+            isFocused: fieldFocus,
+            isFieldPotentiallyValid: fieldPotentiallyValid,
+            isValid: fieldValid
+        }
+        if (currentField === 'cardNumberField') {
+            potentialCardTypes = parsedCardType(cardTypes)
+        } else {
+            potentialCardTypes = cards
+        }
+        return { fields, potentialCardTypes }
+    }
+
     useEffect(() => {
         // useEffect is fired on first render as well as when
         // any value in the depenency array has changed. We
@@ -106,30 +125,59 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
         if ( initialRender.current && fieldValue === '') {
             initialRender.current = false
         } else if( !initialRender.current && typeof onChange === 'function' ) {
-            const { cards, fields } = getCardFieldState()
-            const currentField = kebabToCamelCase(CARD_FIELD_TYPE_TO_FRAME_NAME[type])
-            let potentialCardTypes
-            fields[currentField] = {
-                isEmpty: isEmpty(fieldValue),
-                isFocused: fieldFocus,
-                isFieldPotentiallyValid: fieldPotentiallyValid,
-                isValid: fieldValid
-            }
-            if (currentField === 'cardNumberField') {
-                potentialCardTypes = parsedCardType(cardTypes)
-            } else {
-                potentialCardTypes = cards
-            }
- 
+            const {fields, potentialCardTypes} = getStateObject();
+            const errors = getFieldErrors(fields)
             onChange({
                 fields,
                 potentialCardTypes,
                 emittedBy: type,
-                isValid: fieldValid,
-                errors: getFieldErrors(fields)
+                isFormValid: errors.length === 0,
+                errors
             });
         }
     }, [ fieldValue ]);
+    useEffect(() => {
+        if ( initialRender.current && fieldValue === '') {
+            initialRender.current = false
+        } else if(!initialRender.current && typeof onFocus === 'function'){
+            const {fields, potentialCardTypes} = getStateObject();
+            const errors = getFieldErrors(fields)
+            const fieldStateObject = {
+                fields,
+                potentialCardTypes,
+                emittedBy: type,
+                isFormValid: errors.length === 0,
+                errors
+            }
+
+            if(fieldFocus) {
+                onFocus({...fieldStateObject});
+            } else if(typeof onBlur === 'function' && !fieldFocus) {
+                onBlur({...fieldStateObject})
+            }
+        }
+    },[fieldFocus])
+
+    // fire the handler when key code is 13
+    //
+    useEffect(() => {
+        if(inputSubmit && typeof onInputSubmitRequest === 'function') {
+            const {fields, potentialCardTypes} = getStateObject();
+            const errors = getFieldErrors(fields)
+            const fieldStateObject = {
+                fields,
+                potentialCardTypes,
+                emittedBy: type,
+                isFormValid: errors.length === 0,
+                errors
+            }
+
+            onInputSubmitRequest({...fieldStateObject})
+            setInputSubmit(false)
+        }
+        
+    }, [inputSubmit])
+
 
     useEffect(() => {
         autoFocusOnFirstInput(mainRef);
@@ -167,6 +215,14 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
         setCardTypes(potentialCardTypes);
     };
 
+    const onFieldFocus = ({isFocused}) => {
+        setFieldFocus(isFocused)
+    }
+
+    const onInputSubmit = ({isInputSubmitRequest}) => {
+        setInputSubmit(isInputSubmitRequest)
+    }
+
     return (
         <Fragment>
             {
@@ -190,6 +246,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
                             cspNonce={ cspNonce }
                             autocomplete={ autocomplete }
                             onChange={ onFieldChange }
+                            onFocus={onFieldFocus}
+                            onKeyDown={onInputSubmit}
                             styleObject={ style }
                             placeholder={ placeholder }
                             autoFocusRef={ (ref) => setRef(ref.current.base) }
@@ -204,6 +262,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
                             cspNonce={ cspNonce }
                             autocomplete={ autocomplete }
                             onChange={ onFieldChange }
+                            onKeyDown={onInputSubmit}
+                            onFocus={onFieldFocus}
                             styleObject={ style }
                             placeholder={ placeholder }
                             autoFocusRef={ (ref) => setRef(ref.current.base) }
@@ -218,6 +278,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
                             cspNonce={ cspNonce }
                             autocomplete={ autocomplete }
                             onChange={ onFieldChange }
+                            onFocus={onFieldFocus}
+                            onKeyDown={onInputSubmit}
                             styleObject={ style }
                             placeholder={ placeholder }
                             autoFocusRef={ (ref) => setRef(ref.current.base) }
@@ -231,6 +293,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
                             gqlErrors={ fieldGQLErrors.nameField }
                             cspNonce={ cspNonce }
                             onChange={ onFieldChange }
+                            onFocus={onFieldFocus}
+                            onKeyDown={onInputSubmit}
                             styleObject={ style }
                             placeholder={ placeholder }
                             autoFocusRef={ (ref) => setRef(ref.current.base) }
@@ -244,6 +308,8 @@ function Page({ cspNonce, props, featureFlags } : PageProps) : mixed {
                             gqlErrors={ fieldGQLErrors.postalCodeField }
                             cspNonce={ cspNonce }
                             onChange={ onFieldChange }
+                            onFocus={onFieldFocus}
+                            onKeyDown={onInputSubmit}
                             styleObject={ style }
                             placeholder={ placeholder }
                             minLength={ minLength }

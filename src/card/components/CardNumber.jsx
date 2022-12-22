@@ -59,6 +59,7 @@ type CardNumberProps = {|
     onChange : (numberEvent : CardNumberChangeEvent) => void,
     onFocus? : (event : InputEvent) => void,
     onBlur? : (event : InputEvent) => void,
+    onKeyDown? : (keyDown : boolean) => void,
     onValidityChange? : (numberValidity : FieldValidity) => void,
     onEligibilityChange? : (isCardEligible : boolean) => void,
 |};
@@ -76,6 +77,7 @@ export function CardNumber(
         onChange,
         onFocus,
         onBlur,
+        onKeyDown,
         onValidityChange,
         onEligibilityChange,
     } : CardNumberProps
@@ -215,6 +217,9 @@ export function CardNumber(
         if (typeof onBlur === 'function') {
             onBlur(event);
         }
+        if ( typeof onKeyDown === 'function') {
+            onKeyDown(false)
+        }
 
         setInputState((newState) => ({ ...newState, ...updatedState }));
         
@@ -222,6 +227,14 @@ export function CardNumber(
     };
 
     const onKeyDownEvent : (InputEvent) => void = (event : InputEvent) : void => {
+        if (typeof onKeyDown === 'function') {
+            if(event.key === "Enter"){
+                onKeyDown(true)
+            } else {
+                onKeyDown(false)
+            }
+        }
+
         if (allowNavigation) {
             navigateOnKeyDown(event, navigation);
         }
